@@ -96,7 +96,7 @@
   let selectedOptions = [];
 
   // ★GASのウェブアプリURL
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbxfs6TjVDXH9ibU74dk5gzlWjgCMOnYMHcTs5iRQfnsxweultTanmK4ExFb1Lb8ZEkW/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbw2hYWkRHRWn9c4VulLGQkOeW7HeJBxj8O4HDcbVayXsUURv2LY2vYl2aVhqf_lzJij/exec";
 
   window.onload = () => {
     const script = document.createElement('script');
@@ -122,7 +122,7 @@
     return h > 0 ? (mins > 0 ? h + "時間" + mins + "分" : h + "時間") : mins + "分";
   }
 
-  function filterList() {
+function filterList() {
     const gender = document.getElementById('gender').value;
     const age = parseInt(document.getElementById('userAge').value) || 0;
     const clist = document.getElementById('courseList');
@@ -131,18 +131,26 @@
     if (!gender) {
       clist.innerHTML = "性別を選択してください";
       olist.innerHTML = "コースを選択すると表示されます";
-      updateTotal();
       return;
     }
 
-    // 除外ルールの抽出
+    if (!masterData.courses || masterData.courses.length === 0) {
+      clist.innerHTML = "データを読み込み中、またはデータが空です。";
+      return;
+    }
+
+    // 除外ルール
     let bannedNames = [];
     selectedCourses.forEach(c => { bannedNames = bannedNames.concat(masterData.exclusionRules[c.data.name] || []); });
     selectedOptions.forEach(o => { bannedNames = bannedNames.concat(masterData.exclusionRules[o.data.name] || []); });
 
-    // --- コース一覧の描画 ---
+    // --- コース表示 ---
     clist.innerHTML = "";
-    masterData.courses.filter(c => c.gender === gender || c.gender === "共通" || c.gender === "全員").forEach((c, index) => {
+    const filteredCourses = masterData.courses.filter(c => 
+      c.gender === gender || c.gender === "共通" || c.gender === "全員" || c.gender === ""
+    );
+
+    filteredCourses.forEach((c, index) => {
       const uniqueId = `course-${index}`;
       const isAgeBanned = c.ageLimit && age > 0 && age > c.ageLimit;
       const isExclusionBanned = bannedNames.includes(c.name);
@@ -150,17 +158,20 @@
 
       const div = document.createElement('div');
       div.className = 'item-card' + (isAgeBanned || isExclusionBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
-      div.innerHTML = `<div><b>${c.name}</b><span class="time-tag">${formatTimeDisplay(c.time)}</span></div><span class="price-tag">¥${c.price.toLocaleString()}</span>`;
+      div.innerHTML = `<div><small style="color:#999">${c.category}</small><br><b>${c.name}</b><span class="time-tag">${formatTimeDisplay(c.time)}</span></div><span class="price-tag">¥${c.price.toLocaleString()}</span>`;
       div.onclick = () => toggleItem({id: uniqueId, data: c}, 'course');
       clist.appendChild(div);
     });
 
-    // --- オプション一覧の描画 ---
+    // --- オプション表示 ---
     olist.innerHTML = "";
     if (selectedCourses.length > 0) {
-      masterData.options.filter(o => o.gender === gender || o.gender === "共通" || o.gender === "全員").forEach((o, index) => {
+      const filteredOptions = masterData.options.filter(o => 
+        o.gender === gender || o.gender === "共通" || o.gender === "全員" || o.gender === ""
+      );
+      filteredOptions.forEach((o, index) => {
         const uniqueId = `option-${index}`;
-        const isExclusionBanned = bannedNames.includes(o.name) || bannedNames.includes("op." + o.name);
+        const isExclusionBanned = bannedNames.includes(o.name);
         const isSelected = selectedOptions.some(so => so.id === uniqueId);
 
         const div = document.createElement('div');
