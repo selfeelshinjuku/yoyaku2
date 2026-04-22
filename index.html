@@ -103,35 +103,37 @@
   let selectedCourses = [];
   let selectedOptions = [];
 
-  // ★重要：ご自身のGASのURLに書き換えてください
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbwfKo8A7UdvPPBhQlgd3ZYDGS1RrMYSImCaseYEz9aliQ_yAdmNrD0jZWXduNPWQCA5/exec";
+  // ★新しいGASのURLをここに貼る
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbzHBaeE6kpOpMqMtAvNeFdV6q5wxl8KRRunG3e2-O6QO2ZDkCMkqOKaEX6UJSWcH6Oo/exec";
 
   window.onload = () => {
-    fetch(GAS_URL + "?type=getSystemData")
-      .then(response => response.json())
-      .then(data => {
-        masterData = data;
-        // 診断からの自動セット機能も「本物」と同じ
-        const params = new URLSearchParams(window.location.search);
-        const selectedCourseNames = params.get('selected');
-        if (selectedCourseNames) {
-          const names = selectedCourseNames.split(',');
-          names.forEach(name => {
-            const course = masterData.courses.find(c => c.name === name.trim());
-            if (course) {
-              document.getElementById('gender').value = course.gender;
-              selectedCourses.push({id: `auto-${Date.now()}-${Math.random()}`, data: course});
-            }
-          });
-          filterList();
-        }
-      })
-      .catch(err => {
-         console.error("データの読み込みに失敗しました。GASのデプロイを確認してください。");
-      });
+    // JSONPという特別な方法でデータを読み込みます
+    const script = document.createElement('script');
+    script.src = `${GAS_URL}?type=getSystemData&callback=handleData`;
+    document.body.appendChild(script);
   };
 
-  /* ロジック部分はあなたの「本物」を100%再現 */
+  // データを正常に受け取った時の処理
+  window.handleData = (data) => {
+    masterData = data;
+    console.log("Data loaded:", masterData);
+    
+    const params = new URLSearchParams(window.location.search);
+    const selectedCourseNames = params.get('selected');
+    if (selectedCourseNames) {
+      const names = selectedCourseNames.split(',');
+      names.forEach(name => {
+        const course = masterData.courses.find(c => c.name === name.trim());
+        if (course) {
+          document.getElementById('gender').value = course.gender;
+          selectedCourses.push({id: `auto-${Date.now()}-${Math.random()}`, data: course});
+        }
+      });
+      filterList();
+    }
+  };
+
+  // --- これより下の関数（resetSelection, filterListなど）は元の「本物」と同じです ---
   function resetSelection() { selectedCourses = []; selectedOptions = []; }
   function formatTimeDisplay(min) {
     const m = parseInt(min) || 0; if (m === 0) return "0分";
@@ -236,5 +238,6 @@
     });
   }
 </script>
+  
 </body>
 </html>
