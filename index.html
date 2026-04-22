@@ -107,30 +107,22 @@
   const GAS_URL = "https://script.google.com/macros/s/AKfycbzHBaeE6kpOpMqMtAvNeFdV6q5wxl8KRRunG3e2-O6QO2ZDkCMkqOKaEX6UJSWcH6Oo/exec";
 
   window.onload = () => {
-    // JSONPという特別な方法でデータを読み込みます
+    console.log("Loading data from GAS...");
     const script = document.createElement('script');
-    script.src = `${GAS_URL}?type=getSystemData&callback=handleData`;
+    // callback名を handleData に固定してリクエストします
+    script.src = GAS_URL + "?type=getSystemData&callback=handleData";
     document.body.appendChild(script);
   };
 
-  // データを正常に受け取った時の処理
+  // データを受け取った後の処理
   window.handleData = (data) => {
-    masterData = data;
-    console.log("Data loaded:", masterData);
-    
-    const params = new URLSearchParams(window.location.search);
-    const selectedCourseNames = params.get('selected');
-    if (selectedCourseNames) {
-      const names = selectedCourseNames.split(',');
-      names.forEach(name => {
-        const course = masterData.courses.find(c => c.name === name.trim());
-        if (course) {
-          document.getElementById('gender').value = course.gender;
-          selectedCourses.push({id: `auto-${Date.now()}-${Math.random()}`, data: course});
-        }
-      });
-      filterList();
+    if (data.error) {
+      alert("データ取得エラー: " + data.error);
+      return;
     }
+    masterData = data;
+    console.log("Data loaded successfully!");
+    filterList(); // ここでリストを初期化
   };
 
   // --- これより下の関数（resetSelection, filterListなど）は元の「本物」と同じです ---
