@@ -1,0 +1,16 @@
+// GAS側のコード
+function doPost(e) {
+  var params = JSON.parse(e.postData.contents);
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  
+  // スプレッドシートに保存する処理（例）
+  sheet.appendRow([new Date(), params.name, params.course]);
+  
+  return ContentService.createTextOutput(JSON.stringify({"result":"success"}))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// 外部（GitHub）からのアクセスを許可するために必要
+function doGet(e) {
+  return ContentService.createTextOutput("GAS Service is Running");
+}
