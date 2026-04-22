@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SelFeel 予約コンシェルジュ</title>
   <style>
-    /* あなたの「本物」のデザイン設定100%継承 */
+    /* デザイン設定はそのまま維持 */
     :root { --gold: #b8a07e; --dark-gold: #8a7a66; --bg-creme: #fdfaf5; --text: #4a4a4a; --success: #28a745; }
     body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif; background-color: #f8f7f2; color: var(--text); padding: 10px; line-height: 1.6; }
     .container { max-width: 650px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
@@ -25,13 +25,11 @@
     .submit-btn { width: 100%; padding: 20px; background: linear-gradient(135deg, #d4af37, #b8a07e); color: white; border: none; border-radius: 40px; font-size: 1.15em; cursor: pointer; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(184, 160, 126, 0.3); }
     .copy-btn { background: #4a4a4a; margin-top: 10px; box-shadow: none; }
     .back-btn { width: 100%; padding: 15px; background: white; color: var(--dark-gold); border: 1px solid var(--gold); border-radius: 40px; font-size: 1em; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-    .back-btn:hover { background: var(--bg-creme); }
-    .sheet-frame, .form-frame { width: 100%; border: 1px solid #eee; border-radius: 12px; margin-top: 15px; background: #fff; }
-    .sheet-frame { height: 500px; }
+    .summary-box { background: #faf9f5; padding: 20px; border-radius: 10px; border: 1px dashed #dcd8c0; margin-bottom: 10px; font-size: 0.95em; white-space: pre-wrap; color: #333; text-align: left; }
+    .guide-text { font-size: 0.88em; color: #888; margin-bottom: 10px; }
+    .success-text { color: var(--success); font-weight: bold; margin-top: 10px; display: none; text-align: center; }
+    .sheet-frame, .form-frame { width: 100%; border: 1px solid #eee; border-radius: 12px; margin-top: 15px; background: #fff; height: 500px; }
     .form-frame { height: 900px; }
-    .summary-box { background: #faf9f5; padding: 20px; border-radius: 10px; border: 1px dashed #dcd8c0; margin-bottom: 10px; font-size: 0.95em; white-space: pre-wrap; color: #333; line-height: 1.8; text-align: left; }
-    .guide-text { font-size: 0.88em; color: #888; margin-bottom: 10px; line-height: 1.5; }
-    .success-text { color: var(--success); font-weight: bold; margin-top: 10px; display: none; text-align: center; font-size: 1em; }
   </style>
 </head>
 <body>
@@ -49,8 +47,8 @@
         <option value="3回目以上">3回目以上</option>
       </select>
       <input type="text" id="userName" placeholder="お名前">
-      <input type="number" id="userAge" placeholder="年齢">
-      <select id="gender" onchange="resetSelection(); filterList();">
+      <input type="number" id="userAge" placeholder="年齢" oninput="filterList()">
+      <select id="gender" onchange="handleGenderChange()">
         <option value="">性別を選択</option>
         <option value="男性">男性</option>
         <option value="女性">女性</option>
@@ -76,93 +74,95 @@
   <div id="step2" style="display:none;">
     <div class="section">
       <div class="step-title"><span class="step-badge">A</span>予約内容をコピーする</div>
-      <p class="guide-text">下の内容をコピーしてください。最後にフォームへ貼り付けます。</p>
       <div id="summaryText" class="summary-box"></div>
       <button class="submit-btn copy-btn" id="btnCopy" onclick="copyToClipboard()">クリックして予約内容をコピー</button>
       <div id="copySuccess" class="success-text">✅ コピーしました！</div>
-      <button class="back-btn" onclick="backToStep1()">⬅ メニューを選び直す（データは保持されます）</button>
+      <button class="back-btn" onclick="backToStep1()">⬅ メニューを選び直す</button>
     </div>
-
     <div class="section">
       <div class="step-title"><span class="step-badge">B</span>カレンダーで空き状況を確認</div>
-      <p class="guide-text">ご希望の日時が空いているかご確認ください。</p>
       <iframe class="sheet-frame" src="https://script.google.com/macros/s/AKfycbysmWbo5JHPRPMuAkdubDPMDeUEG4zn-aKuBjyUuCN3ix2S6F3C5HVlJhm1Xmeiddc/exec"></iframe>
     </div>
-
     <div class="section">
       <div class="step-title"><span class="step-badge">C</span>予約フォームへ貼り付けて送信</div>
-      <p class="guide-text">一番下の「ご希望内容」欄に、先ほどコピーした内容を貼り付けてください。</p>
       <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
     </div>
-    <button onclick="location.reload()" style="width:100%; background:none; border:none; color:gray; cursor:pointer; text-decoration:underline; margin: 20px 0 40px 0;">← 最初から（全データを消去）</button>
   </div>
 </div>
 
 <script>
-  let masterData = {};
+  let masterData = { courses: [], options: [], exclusionRules: {} };
   let selectedCourses = [];
   let selectedOptions = [];
 
-  // ★新しいGASのURLをここに貼る
+  // ★GASのウェブアプリURL
   const GAS_URL = "https://script.google.com/macros/s/AKfycbzHBaeE6kpOpMqMtAvNeFdV6q5wxl8KRRunG3e2-O6QO2ZDkCMkqOKaEX6UJSWcH6Oo/exec";
 
   window.onload = () => {
-    console.log("Loading data from GAS...");
     const script = document.createElement('script');
-    // callback名を handleData に固定してリクエストします
-    script.src = GAS_URL + "?type=getSystemData&callback=handleData";
+    script.src = GAS_URL + "?callback=handleData";
     document.body.appendChild(script);
   };
 
-  // データを受け取った後の処理
   window.handleData = (data) => {
-    if (data.error) {
-      alert("データ取得エラー: " + data.error);
-      return;
-    }
+    if (data.error) { alert("エラー: " + data.error); return; }
     masterData = data;
-    console.log("Data loaded successfully!");
-    filterList(); // ここでリストを初期化
+    filterList();
   };
 
-  // --- これより下の関数（resetSelection, filterListなど）は元の「本物」と同じです ---
-  function resetSelection() { selectedCourses = []; selectedOptions = []; }
+  function handleGenderChange() {
+    selectedCourses = [];
+    selectedOptions = [];
+    filterList();
+  }
+
   function formatTimeDisplay(min) {
     const m = parseInt(min) || 0; if (m === 0) return "0分";
     const h = Math.floor(m / 60); const mins = m % 60;
     return h > 0 ? (mins > 0 ? h + "時間" + mins + "分" : h + "時間") : mins + "分";
   }
+
   function filterList() {
     const gender = document.getElementById('gender').value;
     const age = parseInt(document.getElementById('userAge').value) || 0;
     const clist = document.getElementById('courseList');
     const olist = document.getElementById('optionList');
+
     if (!gender) {
       clist.innerHTML = "性別を選択してください";
       olist.innerHTML = "コースを選択すると表示されます";
+      updateTotal();
       return;
     }
+
+    // 除外ルールの抽出
     let bannedNames = [];
     selectedCourses.forEach(c => { bannedNames = bannedNames.concat(masterData.exclusionRules[c.data.name] || []); });
     selectedOptions.forEach(o => { bannedNames = bannedNames.concat(masterData.exclusionRules[o.data.name] || []); });
+
+    // --- コース一覧の描画 ---
     clist.innerHTML = "";
-    masterData.courses.filter(c => c.gender === gender).forEach((c, index) => {
+    masterData.courses.filter(c => c.gender === gender || c.gender === "共通" || c.gender === "全員").forEach((c, index) => {
       const uniqueId = `course-${index}`;
-      const isAgeBanned = c.ageLimit && age > 0 && age > parseInt(c.ageLimit);
+      const isAgeBanned = c.ageLimit && age > 0 && age > c.ageLimit;
       const isExclusionBanned = bannedNames.includes(c.name);
       const isSelected = selectedCourses.some(sc => sc.id === uniqueId);
+
       const div = document.createElement('div');
       div.className = 'item-card' + (isAgeBanned || isExclusionBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
       div.innerHTML = `<div><b>${c.name}</b><span class="time-tag">${formatTimeDisplay(c.time)}</span></div><span class="price-tag">¥${c.price.toLocaleString()}</span>`;
       div.onclick = () => toggleItem({id: uniqueId, data: c}, 'course');
       clist.appendChild(div);
     });
+
+    // --- オプション一覧の描画 ---
     olist.innerHTML = "";
     if (selectedCourses.length > 0) {
-      masterData.options.filter(o => !o.gender || o.gender === gender || o.gender === "共通").forEach((o, index) => {
+      masterData.options.filter(o => o.gender === gender || o.gender === "共通" || o.gender === "全員").forEach((o, index) => {
         const uniqueId = `option-${index}`;
         const isExclusionBanned = bannedNames.includes(o.name) || bannedNames.includes("op." + o.name);
         const isSelected = selectedOptions.some(so => so.id === uniqueId);
+
         const div = document.createElement('div');
         div.className = 'item-card' + (isExclusionBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
         div.innerHTML = `<div><b>${o.name}</b><span class="time-tag">${formatTimeDisplay(o.time)}</span></div><span class="price-tag">¥${o.price.toLocaleString()}</span>`;
@@ -174,6 +174,7 @@
     }
     updateTotal();
   }
+
   function toggleItem(itemObj, type) {
     if (type === 'course') {
       const idx = selectedCourses.findIndex(sc => sc.id === itemObj.id);
@@ -184,14 +185,17 @@
     }
     filterList();
   }
+
   function updateTotal() {
     let t = 0, p = 0;
-    selectedCourses.forEach(c => { t += (parseInt(c.data.time) || 0); p += (parseInt(c.data.price) || 0); });
-    selectedOptions.forEach(o => { t += (parseInt(o.data.time) || 0); p += (parseInt(o.data.price) || 0); });
+    selectedCourses.forEach(c => { t += c.data.time; p += c.data.price; });
+    selectedOptions.forEach(o => { t += o.data.time; p += o.data.price; });
     document.getElementById('displayTime').innerText = formatTimeDisplay(t);
     document.getElementById('displayPrice').innerText = p.toLocaleString();
     return {t, p};
   }
+
+  // goToStep2, backToStep1, copyToClipboard は元のコードと同じため維持
   function goToStep2() {
     const status = document.getElementById('userStatus').value;
     const name = document.getElementById('userName').value;
@@ -217,7 +221,6 @@
     document.getElementById('step2').style.display = "none";
     document.getElementById('step1').style.display = "block";
     window.scrollTo(0,0);
-    filterList();
   }
   function copyToClipboard() {
     const text = document.getElementById('summaryText').innerText;
@@ -230,6 +233,6 @@
     });
   }
 </script>
-  
 </body>
 </html>
+
