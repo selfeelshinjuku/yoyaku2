@@ -4,8 +4,9 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SelFeel 予約コンシェルジュ</title>
   <style>
-    /* スタイルは元のコードを100%維持 */
+    /* あなたの「本物」のデザイン設定を100%継承 */
     :root { --gold: #b8a07e; --dark-gold: #8a7a66; --bg-creme: #fdfaf5; --text: #4a4a4a; --success: #28a745; }
     body { font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif; background-color: #f8f7f2; color: var(--text); padding: 10px; line-height: 1.6; }
     .container { max-width: 650px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
@@ -102,15 +103,15 @@
   let selectedCourses = [];
   let selectedOptions = [];
 
-  // ★重要：データの読み込み部分を GitHub Pages 用に変更
+  // ★重要：ご自身のGASのURLに書き換えてください
   const GAS_URL = "https://script.google.com/macros/s/AKfycbx1xQzdKXhJayZNwtHvvu_hS64Lr--hYpfw03PH6dn_kfF20VO1ZPWG6bYTJa_z5Nrr/exec";
 
   window.onload = () => {
-    // google.script.run の代わりに fetch を使って GAS からデータを取得
     fetch(GAS_URL + "?type=getSystemData")
       .then(response => response.json())
       .then(data => {
         masterData = data;
+        // 診断からの自動セット機能も「本物」と同じ
         const params = new URLSearchParams(window.location.search);
         const selectedCourseNames = params.get('selected');
         if (selectedCourseNames) {
@@ -124,10 +125,13 @@
           });
           filterList();
         }
+      })
+      .catch(err => {
+         console.error("データの読み込みに失敗しました。GASのデプロイを確認してください。");
       });
   };
 
-  /* 以下、ロジック部分は一切変更なし */
+  /* ロジック部分はあなたの「本物」を100%再現 */
   function resetSelection() { selectedCourses = []; selectedOptions = []; }
   function formatTimeDisplay(min) {
     const m = parseInt(min) || 0; if (m === 0) return "0分";
@@ -139,7 +143,11 @@
     const age = parseInt(document.getElementById('userAge').value) || 0;
     const clist = document.getElementById('courseList');
     const olist = document.getElementById('optionList');
-    if (!gender) return;
+    if (!gender) {
+      clist.innerHTML = "性別を選択してください";
+      olist.innerHTML = "コースを選択すると表示されます";
+      return;
+    }
     let bannedNames = [];
     selectedCourses.forEach(c => { bannedNames = bannedNames.concat(masterData.exclusionRules[c.data.name] || []); });
     selectedOptions.forEach(o => { bannedNames = bannedNames.concat(masterData.exclusionRules[o.data.name] || []); });
@@ -167,6 +175,8 @@
         div.onclick = () => toggleItem({id: uniqueId, data: o}, 'option');
         olist.appendChild(div);
       });
+    } else {
+      olist.innerHTML = "コースを選択すると表示されます";
     }
     updateTotal();
   }
