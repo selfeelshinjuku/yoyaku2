@@ -6,34 +6,208 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SelFeel 予約コンシェルジュ</title>
   <style>
-    :root { --gold: #b8a07e; --dark-gold: #8a7a66; --bg-creme: #fdfaf5; --text: #4a4a4a; --success: #28a745; }
-    body { font-family: "Helvetica Neue", Arial, sans-serif; background-color: #f8f7f2; color: var(--text); padding: 10px; line-height: 1.6; }
-    .container { max-width: 650px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
-    h2 { text-align: center; color: var(--gold); border-bottom: 2px solid #f0ece4; padding-bottom: 15px; font-weight: 300; letter-spacing: 2px; margin-top: 0; }
-    .section { margin-bottom: 30px; padding: 20px; border: 1px solid #f0ece4; border-radius: 15px; background: white; position: relative; }
-    .step-title { font-size: 1.1em; font-weight: bold; color: var(--dark-gold); margin-bottom: 15px; display: flex; align-items: center; }
-    .step-badge { background: var(--gold); color: white; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; justify-content: center; align-items: center; margin-right: 12px; font-size: 0.85em; }
-    label { display: block; margin-bottom: 8px; font-weight: bold; color: #777; font-size: 0.85em; }
-    input, select { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; }
-    .item-card { display: flex; align-items: center; padding: 15px; border: 1px solid #f2f2f2; margin-bottom: 10px; border-radius: 12px; cursor: pointer; transition: 0.2s; border-left: 6px solid transparent; }
-    .selected { border-left-color: var(--gold) !important; background-color: var(--bg-creme); border-color: #eaddca; }
-    .disabled { opacity: 0.3; pointer-events: none; background-color: #f9f9f9; color: #ccc; }
-    .price-tag { margin-left: auto; color: var(--gold); font-weight: bold; }
-    .time-tag { font-size: 0.85em; color: #888; display: block; margin-top: 2px; }
-    .total-area { background: var(--bg-creme); padding: 25px; border-radius: 15px; border: 1px solid #eaddca; text-align: center; margin-top: 25px; }
-    .submit-btn { width: 100%; padding: 20px; background: linear-gradient(135deg, #d4af37, #b8a07e); color: white; border: none; border-radius: 40px; font-size: 1.15em; cursor: pointer; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 15px rgba(184, 160, 126, 0.3); }
+    :root {
+      --gold: #b8a07e;
+      --dark-gold: #8a7a66;
+      --light-gold: #e8d9c4;
+      --bg-creme: #fdfaf5;
+      --text: #4a4a4a;
+      --success: #28a745;
+    }
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background-color: #f8f7f2;
+      color: var(--text);
+      padding: 10px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    }
+    h2 {
+      text-align: center;
+      color: var(--gold);
+      border-bottom: 2px solid #f0ece4;
+      padding-bottom: 15px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-top: 0;
+    }
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 1px solid #f0ece4;
+      border-radius: 15px;
+      background: white;
+      position: relative;
+    }
+    .step-title {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: var(--dark-gold);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+    .step-badge {
+      background: var(--gold);
+      color: white;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 12px;
+      font-size: 0.85em;
+      flex-shrink: 0;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #777;
+      font-size: 0.85em;
+    }
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .category-label {
+      font-size: 0.78em;
+      font-weight: bold;
+      color: var(--dark-gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 16px 0 6px;
+      padding: 4px 10px;
+      background: var(--bg-creme);
+      border-radius: 6px;
+      display: inline-block;
+    }
+    .item-card {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid #f2f2f2;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+      border-left: 6px solid transparent;
+    }
+    .item-card:hover:not(.disabled) {
+      background-color: #fdfaf5;
+      border-color: #eaddca;
+    }
+    .selected {
+      border-left-color: var(--gold) !important;
+      background-color: var(--bg-creme) !important;
+      border-color: #eaddca !important;
+    }
+    .disabled {
+      opacity: 0.3;
+      pointer-events: none;
+      background-color: #f9f9f9;
+      color: #ccc;
+    }
+    .price-tag {
+      margin-left: auto;
+      color: var(--gold);
+      font-weight: bold;
+      white-space: nowrap;
+      padding-left: 10px;
+    }
+    .time-tag {
+      font-size: 0.85em;
+      color: #888;
+      display: block;
+      margin-top: 2px;
+    }
+    .total-area {
+      background: var(--bg-creme);
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid #eaddca;
+      text-align: center;
+      margin-top: 25px;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, #d4af37, #b8a07e);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      font-size: 1.15em;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(184, 160, 126, 0.3);
+    }
+    .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .copy-btn { background: #4a4a4a; margin-top: 10px; }
-    .back-btn { width: 100%; padding: 15px; background: white; color: var(--dark-gold); border: 1px solid var(--gold); border-radius: 40px; font-size: 1em; cursor: pointer; margin-top: 20px; }
-    .summary-box { background: #faf9f5; padding: 20px; border-radius: 10px; border: 1px dashed #dcd8c0; margin-bottom: 10px; font-size: 0.95em; white-space: pre-wrap; color: #333; text-align: left; }
-    .sheet-frame, .form-frame { width: 100%; border: 1px solid #eee; border-radius: 12px; margin-top: 15px; background: #fff; height: 500px; }
+    .back-btn {
+      width: 100%;
+      padding: 15px;
+      background: white;
+      color: var(--dark-gold);
+      border: 1px solid var(--gold);
+      border-radius: 40px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .summary-box {
+      background: #faf9f5;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px dashed #dcd8c0;
+      margin-bottom: 10px;
+      font-size: 0.95em;
+      white-space: pre-wrap;
+      color: #333;
+      text-align: left;
+    }
+    .sheet-frame, .form-frame {
+      width: 100%;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      margin-top: 15px;
+      background: #fff;
+      height: 500px;
+    }
     .form-frame { height: 900px; }
+    .loading-msg {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.9em;
+      padding: 20px;
+    }
+    .error-msg {
+      text-align: center;
+      color: #e74c3c;
+      font-size: 0.9em;
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <h2>SelFeel 予約コンシェルジュ</h2>
- 
+
+  <!-- STEP 1: メニュー選択 -->
   <div id="step1">
     <div class="section">
       <div class="step-title"><span class="step-badge">1</span>お客様情報をご入力ください</div>
@@ -44,9 +218,9 @@
         <option value="3回目以上">3回目以上</option>
       </select>
       <input type="text" id="userName" placeholder="お名前">
-      <input type="number" id="userAge" placeholder="年齢" oninput="filterList()">
+      <input type="number" id="userAge" placeholder="年齢" min="1" max="99" oninput="filterList()">
       <select id="gender" onchange="handleGenderChange()">
-        <option value="">性別を選択</option>
+        <option value="">性別を選択（必須）</option>
         <option value="男性">男性</option>
         <option value="女性">女性</option>
       </select>
@@ -55,27 +229,34 @@
     <div class="section">
       <div class="step-title"><span class="step-badge">2</span>メニューをお選びください</div>
       <label>コースを選択</label>
-      <div id="courseList" style="margin-bottom:20px;">性別を選択してください</div>
-      <label>オプションを追加（任意）</label>
-      <div id="optionList">コースを選択すると表示されます</div>
+      <div id="courseList"><div class="loading-msg">性別を選択してください</div></div>
+      <label style="margin-top:20px;">オプションを追加（任意）</label>
+      <div id="optionList"><div class="loading-msg">コースを選択すると表示されます</div></div>
     </div>
 
     <div class="total-area">
-      <div style="font-size: 1.25em; font-weight: bold;">合計時間: <span id="displayTime">0分</span> / 料金: ¥<span id="displayPrice">0</span></div>
-      <button class="submit-btn" style="margin-top:15px;" onclick="goToStep2()">空き状況の確認へ進む</button>
+      <div style="font-size: 1.25em; font-weight: bold;">
+        合計時間: <span id="displayTime">0分</span> / 料金: ¥<span id="displayPrice">0</span>
+      </div>
+      <button class="submit-btn" style="margin-top:15px;" onclick="goToStep2()">
+        空き状況の確認へ進む
+      </button>
     </div>
   </div>
 
+  <!-- STEP 2: 確認・予約 -->
   <div id="step2" style="display:none;">
     <div class="section">
       <div class="step-title"><span class="step-badge">A</span>予約内容をコピーする</div>
       <div id="summaryText" class="summary-box"></div>
-      <button class="submit-btn copy-btn" id="btnCopy" onclick="copyToClipboard()">予約内容をコピー</button>
+      <button class="submit-btn copy-btn" onclick="copyToClipboard()">予約内容をコピー</button>
       <button class="back-btn" onclick="backToStep1()">⬅ メニューを選び直す</button>
     </div>
     <div class="section">
       <div class="step-title"><span class="step-badge">B</span>カレンダーで空き状況を確認</div>
-      <iframe class="sheet-frame" src="https://script.google.com/macros/s/AKfycbysmWbo5JHPRPMuAkdubDPMDeUEG4zn-aKuBjyUuCN3ix2S6F3C5HVlJhm1Xmeiddc/exec"></iframe>
+      <iframe class="sheet-frame"
+        src="https://script.google.com/macros/s/AKfycbysmWbo5JHPRPMuAkdubDPMDeUEG4zn-aKuBjyUuCN3ix2S6F3C5HVlJhm1Xmeiddc/exec">
+      </iframe>
     </div>
     <div class="section">
       <div class="step-title"><span class="step-badge">C</span>予約フォームへ貼り付けて送信</div>
@@ -85,143 +266,316 @@
 </div>
 
 <script>
-  let masterData = { courses: [], options: [], exclusionRules: {} };
-  let selectedCourses = [];
-  let selectedOptions = [];
+  // ==========================================
+  // 状態管理
+  // ==========================================
+  let masterData = { courses: [], options: [] };
+  let selectedCourses = [];   // [{ id, data }]
+  let selectedOptions = [];   // [{ id, data }]
 
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbyfHyUoJOwYuLzj5QlCjeSqK0BJ1mF34UFZ-GWTkJYltw5jjpGP89kyxJs541mSGtbF/exec";
+  // ★ GAS WebアプリのURL（JSONPエンドポイント）
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbzXuvjGE0fzJhWHSQIbd-8uORFZyy2sxZZKMy2UEiGC6ydDq544QMKTPtlyMPV1iyNk/exec";
 
+  // ==========================================
+  // 文字ゆれ正規化
+  // ==========================================
+  function normalize(str) {
+    return String(str || "").replace(/\s+/g, "").trim();
+  }
+
+  // ==========================================
+  // 起動時: GASからデータ取得（JSONP）
+  // ==========================================
   window.onload = () => {
     const script = document.createElement('script');
     script.src = GAS_URL + "?callback=handleData";
+    script.onerror = () => {
+      document.getElementById('courseList').innerHTML =
+        '<div class="error-msg">データの取得に失敗しました。ページを再読み込みしてください。</div>';
+    };
     document.body.appendChild(script);
   };
 
   window.handleData = (data) => {
-    if (data.error) { alert("エラー: " + data.error); return; }
+    if (data.error) {
+      document.getElementById('courseList').innerHTML =
+        '<div class="error-msg">エラー: ' + data.error + '</div>';
+      return;
+    }
     masterData = data;
     filterList();
   };
 
+  // ==========================================
+  // 性別変更 → 選択リセット
+  // ==========================================
   function handleGenderChange() {
     selectedCourses = [];
     selectedOptions = [];
     filterList();
   }
 
+  // ==========================================
+  // リスト再描画（コア関数）
+  // ==========================================
   function filterList() {
     const gender = document.getElementById('gender').value;
-    const age = parseInt(document.getElementById('userAge').value) || 0;
-    const clist = document.getElementById('courseList');
-    const olist = document.getElementById('optionList');
+    const age    = parseInt(document.getElementById('userAge').value) || 0;
+    const clist  = document.getElementById('courseList');
+    const olist  = document.getElementById('optionList');
 
     if (!gender) {
-      clist.innerHTML = "性別を選択してください";
-      olist.innerHTML = "コースを選択すると表示されます";
-      updateTotal(); return;
+      clist.innerHTML = '<div class="loading-msg">性別を選択してください</div>';
+      olist.innerHTML = '<div class="loading-msg">コースを選択すると表示されます</div>';
+      updateTotal();
+      return;
     }
 
-    // 除外ルール抽出
-    let bannedNames = [];
-    selectedCourses.forEach(c => { bannedNames = bannedNames.concat(masterData.exclusionRules[c.data.name] || []); });
-    selectedOptions.forEach(o => { bannedNames = bannedNames.concat(masterData.exclusionRules[o.data.name] || []); });
+    // ---- 選択中アイテムから排他カテゴリ・IDを収集 ----
+    // exclusiveには「カテゴリ名」または「コースID」が入っている
+    const bannedItems = new Set();
+    selectedCourses.forEach(sc => {
+      (sc.data.exclusive || []).forEach(ex => bannedItems.add(normalize(ex)));
+    });
+    selectedOptions.forEach(so => {
+      (so.data.exclusive || []).forEach(ex => bannedItems.add(normalize(ex)));
+    });
 
-    // コース表示
+    // 選択中コースのカテゴリとIDセット
+    const selectedCourseIds        = new Set(selectedCourses.map(sc => normalize(sc.data.id)));
+    const selectedCourseCategories = new Set(selectedCourses.map(sc => normalize(sc.data.category)));
+
+    // ---- コース一覧描画 ----
     clist.innerHTML = "";
+    let lastCategory = null;
+
     masterData.courses.forEach((c, index) => {
-      if (c.gender !== "共通" && c.gender !== "全員" && c.gender !== gender) return;
-      const uniqueId = `course-${index}`;
+      // 性別フィルタ
+      const cg = normalize(c.gender);
+      if (cg !== "共通" && cg !== "全員" && cg !== normalize(gender)) return;
+
+      // カテゴリ区切り
+      if (c.category !== lastCategory) {
+        const catLabel = document.createElement('div');
+        catLabel.className = 'category-label';
+        catLabel.textContent = c.category;
+        clist.appendChild(catLabel);
+        lastCategory = c.category;
+      }
+
+      const uniqueId    = `course-${index}`;
       const isAgeBanned = c.ageLimit && age > 0 && age > c.ageLimit;
-      const isExclusionBanned = bannedNames.includes(c.name);
-      const isSelected = selectedCourses.some(sc => sc.id === uniqueId);
+
+      // 排他チェック：bannedItemsにコース名・ID・カテゴリが含まれる場合
+      const isExcluded  = bannedItems.has(normalize(c.name))
+                       || bannedItems.has(normalize(c.id))
+                       || bannedItems.has(normalize(c.category));
+
+      const isSelected  = selectedCourses.some(sc => sc.id === uniqueId);
+      const isBanned    = isAgeBanned || (isExcluded && !isSelected);
 
       const div = document.createElement('div');
-      div.className = 'item-card' + (isAgeBanned || isExclusionBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
-      div.innerHTML = `<div><b>${c.name}</b><span class="time-tag">${formatTimeDisplay(c.time)}</span></div><span class="price-tag">¥${c.price.toLocaleString()}</span>`;
-      div.onclick = () => { if(!isAgeBanned && !isExclusionBanned) toggleItem({id: uniqueId, data: c}, 'course'); };
+      div.className = 'item-card' + (isBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
+      div.innerHTML = `
+        <div>
+          <b>${c.name}</b>
+          <span class="time-tag">${formatTimeDisplay(c.time)}</span>
+        </div>
+        <span class="price-tag">¥${c.price.toLocaleString()}</span>`;
+      div.onclick = () => {
+        if (!isBanned) toggleItem({ id: uniqueId, data: c }, 'course');
+      };
       clist.appendChild(div);
     });
 
-    // オプション表示
+    // ---- オプション一覧描画 ----
     olist.innerHTML = "";
-    if (selectedCourses.length > 0) {
-      masterData.options.forEach((o, index) => {
-        if (o.gender !== "共通" && o.gender !== "全員" && o.gender !== gender) return;
-        const uniqueId = `option-${index}`;
-        const isExclusionBanned = bannedNames.includes(o.name) || bannedNames.includes("op." + o.name);
-        const isSelected = selectedOptions.some(so => so.id === uniqueId);
 
-        const div = document.createElement('div');
-        div.className = 'item-card' + (isExclusionBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
-        div.innerHTML = `<div><b>${o.name}</b><span class="time-tag">${formatTimeDisplay(o.time)}</span></div><span class="price-tag">¥${o.price.toLocaleString()}</span>`;
-        div.onclick = () => { if(!isExclusionBanned) toggleItem({id: uniqueId, data: o}, 'option'); };
-        olist.appendChild(div);
-      });
-    } else {
-      olist.innerHTML = "コースを選択すると表示されます";
+    if (selectedCourses.length === 0) {
+      olist.innerHTML = '<div class="loading-msg">コースを選択すると表示されます</div>';
+      updateTotal();
+      return;
     }
+
+    let anyOption = false;
+
+    masterData.options.forEach((o, index) => {
+      // 性別フィルタ
+      const og = normalize(o.gender);
+      if (og !== "共通" && og !== "全員" && og !== normalize(gender)) return;
+
+      // 紐付け条件チェック
+      // condition が "全て" のみ or 空 → 常に表示
+      // それ以外 → 選択中コースのIDまたはカテゴリがconditionに含まれる場合のみ表示
+      const cond = o.condition || ["全て"];
+      const isAllCond = cond.length === 0
+                     || cond.includes("全て")
+                     || cond.includes("全員");
+
+      if (!isAllCond) {
+        const condMet = cond.some(c =>
+          selectedCourseIds.has(normalize(c)) ||
+          selectedCourseCategories.has(normalize(c))
+        );
+        if (!condMet) return;
+      }
+
+      // 除外チェック（排他コースがオプションを除外する場合）
+      const isExcluded = bannedItems.has(normalize(o.name))
+                      || bannedItems.has("op." + normalize(o.name))
+                      || bannedItems.has(normalize(o.id));
+
+      const uniqueId = `option-${index}`;
+      const isSelected = selectedOptions.some(so => so.id === uniqueId);
+      const isBanned   = isExcluded && !isSelected;
+
+      const div = document.createElement('div');
+      div.className = 'item-card' + (isBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
+      div.innerHTML = `
+        <div>
+          <b>${o.name}</b>
+          <span class="time-tag">${formatTimeDisplay(o.time)}</span>
+        </div>
+        <span class="price-tag">¥${o.price.toLocaleString()}</span>`;
+      div.onclick = () => {
+        if (!isBanned) toggleItem({ id: uniqueId, data: o }, 'option');
+      };
+      olist.appendChild(div);
+      anyOption = true;
+    });
+
+    if (!anyOption) {
+      olist.innerHTML = '<div class="loading-msg">このコースに追加できるオプションはありません</div>';
+    }
+
     updateTotal();
   }
 
+  // ==========================================
+  // 選択トグル
+  // ==========================================
   function toggleItem(itemObj, type) {
     if (type === 'course') {
       const idx = selectedCourses.findIndex(sc => sc.id === itemObj.id);
-      if (idx > -1) { selectedCourses.splice(idx, 1); selectedOptions = []; } 
-      else { selectedCourses.push(itemObj); }
+      if (idx > -1) {
+        // コース解除 → 紐付きオプションもリセット
+        selectedCourses.splice(idx, 1);
+        selectedOptions = [];
+      } else {
+        selectedCourses.push(itemObj);
+      }
     } else {
       const idx = selectedOptions.findIndex(so => so.id === itemObj.id);
-      if (idx > -1) selectedOptions.splice(idx, 1); else selectedOptions.push(itemObj);
+      if (idx > -1) {
+        selectedOptions.splice(idx, 1);
+      } else {
+        selectedOptions.push(itemObj);
+      }
     }
     filterList();
   }
 
+  // ==========================================
+  // 合計更新
+  // ==========================================
   function updateTotal() {
     let t = 0, p = 0;
-    selectedCourses.forEach(c => { t += c.data.time; p += c.data.price; });
-    selectedOptions.forEach(o => { t += o.data.time; p += o.data.price; });
-    document.getElementById('displayTime').innerText = formatTimeDisplay(t);
+    selectedCourses.forEach(c => { t += c.data.time;  p += c.data.price; });
+    selectedOptions.forEach(o => { t += o.data.time;  p += o.data.price; });
+    document.getElementById('displayTime').innerText  = formatTimeDisplay(t);
     document.getElementById('displayPrice').innerText = p.toLocaleString();
-    return {t, p};
+    return { t, p };
   }
 
+  // ==========================================
+  // 時間フォーマット
+  // ==========================================
   function formatTimeDisplay(min) {
     const m = parseInt(min) || 0;
     if (m === 0) return "0分";
-    const h = Math.floor(m / 60);
+    const h    = Math.floor(m / 60);
     const mins = m % 60;
-    return h > 0 ? (mins > 0 ? h + "時間" + mins + "分" : h + "時間") : mins + "分";
+    if (h > 0 && mins > 0) return h + "時間" + mins + "分";
+    if (h > 0)              return h + "時間";
+    return mins + "分";
   }
 
+  // ==========================================
+  // STEP2へ進む
+  // ==========================================
   function goToStep2() {
     const status = document.getElementById('userStatus').value;
-    const name = document.getElementById('userName').value;
-    const age = document.getElementById('userAge').value;
+    const name   = document.getElementById('userName').value.trim();
+    const age    = document.getElementById('userAge').value;
     const gender = document.getElementById('gender').value;
-    if (!status || !name || !age || !gender || selectedCourses.length === 0) { return alert("未入力の項目があります。"); }
+
+    if (!status) { alert("ご利用回数をお選びください。"); return; }
+    if (!name)   { alert("お名前をご入力ください。"); return; }
+    if (!age)    { alert("年齢をご入力ください。"); return; }
+    if (!gender) { alert("性別をお選びください。"); return; }
+    if (selectedCourses.length === 0) { alert("コースをお選びください。"); return; }
+
     const stats = updateTotal();
-    let summary = `【SelFeel 予約内容】\nご利用：${status}\nお名前：${name}様 (${age}歳/${gender})\n\n■メニュー\n`;
-    selectedCourses.forEach(c => { summary += `・${c.data.name} (${formatTimeDisplay(c.data.time)}) / ¥${c.data.price.toLocaleString()}\n`; });
-    selectedOptions.forEach(o => { summary += `・${o.data.name} (${formatTimeDisplay(o.data.time)}) / ¥${o.data.price.toLocaleString()}\n`; });
+
+    let summary = `【SelFeel 予約内容】\n`;
+    summary    += `ご利用：${status}\n`;
+    summary    += `お名前：${name}様 (${age}歳/${gender})\n\n`;
+    summary    += `■メニュー\n`;
+    selectedCourses.forEach(c => {
+      summary += `・${c.data.name} (${formatTimeDisplay(c.data.time)}) / ¥${c.data.price.toLocaleString()}\n`;
+    });
+    selectedOptions.forEach(o => {
+      summary += `・${o.data.name}`;
+      if (o.data.time > 0) summary += ` (${formatTimeDisplay(o.data.time)})`;
+      summary += ` / ¥${o.data.price.toLocaleString()}\n`;
+    });
     summary += `\n合計：${formatTimeDisplay(stats.t)} / ¥${stats.p.toLocaleString()}`;
+
     document.getElementById('summaryText').innerText = summary;
     document.getElementById('step1').style.display = "none";
     document.getElementById('step2').style.display = "block";
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 
+  // ==========================================
+  // STEP1へ戻る
+  // ==========================================
   function backToStep1() {
     document.getElementById('step2').style.display = "none";
     document.getElementById('step1').style.display = "block";
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }
 
+  // ==========================================
+  // クリップボードコピー
+  // ==========================================
   function copyToClipboard() {
     const text = document.getElementById('summaryText').innerText;
-    navigator.clipboard.writeText(text).then(() => {
-      alert("コピーしました！");
-    });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("コピーしました！予約フォームへ貼り付けてください。");
+      }).catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      alert("コピーしました！予約フォームへ貼り付けてください。");
+    } catch (e) {
+      alert("コピーに失敗しました。手動でコピーしてください。");
+    }
+    document.body.removeChild(ta);
   }
 </script>
 </body>
 </html>
-
