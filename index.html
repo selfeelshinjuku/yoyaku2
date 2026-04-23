@@ -4,7 +4,7 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SelFeel 予約コンシェルジュ</title>
+  <title>セルフィール新宿・予約システム</title>
   <style>
     :root {
       --gold: #b8a07e;
@@ -205,14 +205,14 @@
 <body>
 
 <div class="container">
-  <h2>SelFeel 予約コンシェルジュ</h2>
+  <h2>セルフィール新宿・予約システム</h2>
 
   <!-- STEP 1: メニュー選択 -->
   <div id="step1">
     <div class="section">
-      <div class="step-title"><span class="step-badge">1</span>お客様情報をご入力ください</div>
+      <div class="step-title"><span class="step-badge">1</span>お客様情報をご入力ください（必須）</div>
       <select id="userStatus">
-        <option value="">SelFeel新宿のご利用は？（必須）</option>
+        <option value="">セルフィール新宿のご利用は？</option>
         <option value="はじめて">はじめて</option>
         <option value="2回目">2回目</option>
         <option value="3回目以上">3回目以上</option>
@@ -228,9 +228,9 @@
 
     <div class="section">
       <div class="step-title"><span class="step-badge">2</span>メニューをお選びください</div>
-      <label>コースを選択</label>
+      <label>コースを選択（複数選択可）コースは</label>
       <div id="courseList"><div class="loading-msg">性別を選択してください</div></div>
-      <label style="margin-top:20px;">オプションを追加（任意）</label>
+      <label style="margin-top:20px;">オプションを追加（任意・複数選択可）</label>
       <div id="optionList"><div class="loading-msg">コースを選択すると表示されます</div></div>
     </div>
 
@@ -253,7 +253,7 @@
       <button class="back-btn" onclick="backToStep1()">⬅ メニューを選び直す</button>
     </div>
     <div class="section">
-      <div class="step-title"><span class="step-badge">B</span>カレンダーで空き状況を確認</div>
+      <div class="step-title"><span class="step-badge">B</span>空き状況を確認</div>
       <iframe class="sheet-frame"
         src="https://script.google.com/macros/s/AKfycbwv7E2lqdq4zS-WzUNixgsURwmNERoZXcGYX5_7HHRvE_5XK2lWta5lKxMn4wrjJIpd/exec">
       </iframe>
