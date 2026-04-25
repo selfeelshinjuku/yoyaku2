@@ -392,7 +392,7 @@
     <div class="section">
       <div class="step-title"><span class="step-badge">B</span>空き状況を確認</div>
       <iframe class="sheet-frame"
-        src="https://script.google.com/macros/s/AKfycbx7yHB6hNPwjoxVxIhnTAFDxZe43e_dFAGHSpUGXrIJauBKsQl0f7mh60YDjEy-gx63/exec">
+        src="https://script.google.com/macros/s/AKfycbwU2U7VUlN6vYBbZ9c4VxEVP0VTf7Uy8lyT0vX9Ie1RhnBnE7n0sdZOnPG9_uHX9TNd/exec">
       </iframe>
     </div>
     <div class="section">
@@ -407,7 +407,7 @@
   let selectedCourses = [];
   let selectedOptions = [];
 
-  const GAS_URL  = "https://script.google.com/macros/s/AKfycbwU2U7VUlN6vYBbZ9c4VxEVP0VTf7Uy8lyT0vX9Ie1RhnBnE7n0sdZOnPG9_uHX9TNd/exec";
+  const GAS_URL  = "https://script.google.com/macros/s/AKfycbx7yHB6hNPwjoxVxIhnTAFDxZe43e_dFAGHSpUGXrIJauBKsQl0f7mh60YDjEy-gx63/exec";
   const LINE_URL = "https://lin.ee/o1HjTAv";
 
   function normalize(str) {
@@ -448,8 +448,8 @@
     if (!badgeVal) return '';
     const v = normalize(badgeVal);
     if (v === '人気') return '<span class="badge badge-popular">🔥 人気No.1</span>';
-    if (v === '初回') return '<span class="badge badge-first">👋 初回限定価格</span>';
-    if (v === 'NEW') return '<span class="badge badge-value">⭐ NEW!!</span>';
+    if (v === '初回') return '<span class="badge badge-first">👋 初回おすすめ</span>';
+    if (v === 'お得') return '<span class="badge badge-value">⭐ お得</span>';
     return '';
   }
 
@@ -707,3 +707,4 @@
 </script>
 </body>
 </html>
+
