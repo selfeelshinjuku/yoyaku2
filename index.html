@@ -9,10 +9,9 @@
     :root {
       --gold: #b8a07e;
       --dark-gold: #8a7a66;
-      --light-gold: #e8d9c4;
       --bg-creme: #fdfaf5;
       --text: #4a4a4a;
-      --success: #28a745;
+      --line-green: #06C755;
     }
     body {
       font-family: "Helvetica Neue", Arial, sans-serif;
@@ -88,24 +87,27 @@
       font-weight: bold;
       color: var(--dark-gold);
       letter-spacing: 1px;
-      text-transform: uppercase;
       margin: 16px 0 6px;
       padding: 4px 10px;
       background: var(--bg-creme);
       border-radius: 6px;
       display: inline-block;
     }
-    /* カードを縦並びレイアウトに変更（説明文のため） */
+
+    /* ==============================
+       コースカード
+    ============================== */
     .item-card {
       display: flex;
       align-items: flex-start;
-      padding: 15px;
+      padding: 14px 15px;
       border: 1px solid #f2f2f2;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       border-radius: 12px;
       cursor: pointer;
       transition: 0.2s;
       border-left: 6px solid transparent;
+      position: relative;
     }
     .item-card:hover:not(.disabled) {
       background-color: #fdfaf5;
@@ -116,37 +118,87 @@
       background-color: var(--bg-creme) !important;
       border-color: #eaddca !important;
     }
-    .disabled {
-      opacity: 0.3;
-      pointer-events: none;
-      background-color: #f9f9f9;
-      color: #ccc;
+    /* グレーアウトは非表示に（display:noneで完全に消す） */
+    .disabled { display: none !important; }
+
+    /* ==============================
+       オプションカード（コースより小さく・色違い）
+    ============================== */
+    .option-card {
+      padding: 10px 14px;
+      border-radius: 10px;
+      background-color: #f7f4f0;
+      border: 1px solid #ede8e0;
+      border-left: 6px solid transparent;
     }
-    .card-left {
-      flex: 1;
-      min-width: 0;
+    .option-card:hover:not(.disabled) {
+      background-color: #f0ebe3;
+      border-color: #ddd0c0;
     }
-    .price-tag {
-      margin-left: auto;
-      color: var(--gold);
-      font-weight: bold;
-      white-space: nowrap;
-      padding-left: 10px;
-      flex-shrink: 0;
+    .option-card.selected {
+      border-left-color: var(--dark-gold) !important;
+      background-color: #efe9de !important;
+      border-color: #d4c5b0 !important;
     }
-    .time-tag {
+
+    .card-left { flex: 1; min-width: 0; }
+
+    /* 料金行：等幅フォントで右揃え */
+    .time-price-row {
+      display: flex;
+      align-items: baseline;
+      margin-top: 3px;
       font-size: 0.85em;
       color: #888;
-      display: block;
-      margin-top: 2px;
+      gap: 0;
     }
-    /* 説明文スタイル：料金と同じフォントサイズ、色は緑系 */
-    .desc-tag {
+    .time-col {
+      /* 時間部分：固定幅で左側 */
+      min-width: 90px;
+      flex-shrink: 0;
+    }
+    .price-col {
+      /* 料金部分：右寄せ */
+      text-align: right;
+      flex: 1;
+      font-weight: bold;
+    }
+    .price-normal { color: var(--gold); }
+    .price-first  { color: #e8453c; }
+    .price-original {
       font-size: 0.85em;
+      color: #bbb;
+      text-decoration: line-through;
+      margin-right: 4px;
+    }
+
+    .desc-tag {
+      font-size: 0.82em;
       color: #7aab8a;
       display: block;
       margin-top: 4px;
     }
+
+    /* オプションカード内は少し小さく */
+    .option-card .time-price-row { font-size: 0.82em; }
+    .option-card b { font-size: 0.95em; }
+
+    /* ---- おすすめバッジ ---- */
+    .badge {
+      display: inline-block;
+      font-size: 0.68em;
+      font-weight: bold;
+      padding: 2px 7px;
+      border-radius: 20px;
+      margin-left: 7px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .badge-popular { background: #e8453c; color: white; }
+    .badge-first   { background: #4a90d9; color: white; }
+    .badge-value   { background: #f5a623; color: white; }
+
+    /* ---- 合計エリア ---- */
     .total-area {
       background: var(--bg-creme);
       padding: 25px;
@@ -155,6 +207,8 @@
       text-align: center;
       margin-top: 25px;
     }
+
+    /* ---- ボタン ---- */
     .submit-btn {
       width: 100%;
       padding: 20px;
@@ -166,10 +220,40 @@
       cursor: pointer;
       font-weight: bold;
       transition: 0.3s;
-      box-shadow: 0 4px 15px rgba(184, 160, 126, 0.3);
+      box-shadow: 0 4px 15px rgba(184,160,126,0.3);
     }
     .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .copy-btn { background: #4a4a4a; margin-top: 10px; }
+    .line-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--line-green);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      font-size: 1.1em;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(6,199,85,0.3);
+      text-decoration: none;
+    }
+    .line-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .line-icon {
+      width: 28px; height: 28px;
+      background: white;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1em;
+      flex-shrink: 0;
+    }
     .back-btn {
       width: 100%;
       padding: 15px;
@@ -181,6 +265,8 @@
       cursor: pointer;
       margin-top: 20px;
     }
+
+    /* ---- サマリー ---- */
     .summary-box {
       background: #faf9f5;
       padding: 20px;
@@ -213,6 +299,32 @@
       font-size: 0.9em;
       padding: 20px;
     }
+
+    /* ---- 初回バナー ---- */
+    .first-banner {
+      background: linear-gradient(135deg, #4a90d9, #357abd);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 0.9em;
+      display: none;
+    }
+    .first-banner b { font-size: 1.05em; }
+
+    /* ---- オプション見出し ---- */
+    .option-section-label {
+      font-size: 0.8em;
+      font-weight: bold;
+      color: var(--dark-gold);
+      letter-spacing: 1px;
+      margin: 16px 0 8px;
+      padding: 5px 12px;
+      background: #f0ebe3;
+      border-radius: 6px;
+      display: inline-block;
+      border-left: 3px solid var(--dark-gold);
+    }
   </style>
 </head>
 <body>
@@ -220,11 +332,11 @@
 <div class="container">
   <h2>セルフィール新宿・予約システム</h2>
 
-  <!-- STEP 1: メニュー選択 -->
+  <!-- STEP 1 -->
   <div id="step1">
     <div class="section">
       <div class="step-title"><span class="step-badge">1</span>お客様情報をご入力ください（必須）</div>
-      <select id="userStatus">
+      <select id="userStatus" onchange="handleStatusChange()">
         <option value="">セルフィール新宿のご利用は？</option>
         <option value="はじめて">はじめて</option>
         <option value="2回目">2回目</option>
@@ -240,14 +352,24 @@
 
     <div class="section">
       <div class="step-title"><span class="step-badge">2</span>メニューをお選びください</div>
-      <label>コースを選択（複数選択可）※選択後、組み合わせ不可コースは消えます</label>
+
+      <div class="first-banner" id="firstBanner">
+        👋 <b>はじめてのお客様限定</b>　初回特別価格でご案内しています！<br>
+        <span style="font-size:0.9em;opacity:0.9;">✨マークのコースが対象です</span>
+      </div>
+
+      <label>コースを選択（複数選択可）</label>
       <div id="courseList"><div class="loading-msg">性別を選択してください</div></div>
-      <label style="margin-top:20px;">オプションを追加（任意・複数選択可）</label>
-      <div id="optionList"><div class="loading-msg">コースを選択すると表示されます</div></div>
+
+      <div id="optionSection" style="display:none;">
+        <div class="option-section-label">＋ オプションを追加（任意）</div>
+        <div id="optionList"></div>
+      </div>
+      <div id="optionPlaceholder"><div class="loading-msg">コースを選択するとオプションが表示されます</div></div>
     </div>
 
     <div class="total-area">
-      <div style="font-size: 1.25em; font-weight: bold;">
+      <div style="font-size:1.25em;font-weight:bold;">
         合計時間: <span id="displayTime">0分</span> / 料金: ¥<span id="displayPrice">0</span>
       </div>
       <button class="submit-btn" style="margin-top:15px;" onclick="goToStep2()">
@@ -256,18 +378,21 @@
     </div>
   </div>
 
-  <!-- STEP 2: 確認・予約 -->
+  <!-- STEP 2 -->
   <div id="step2" style="display:none;">
     <div class="section">
-      <div class="step-title"><span class="step-badge">A</span>予約内容をコピーする</div>
+      <div class="step-title"><span class="step-badge">A</span>予約内容をコピー / LINEで送る</div>
       <div id="summaryText" class="summary-box"></div>
-      <button class="submit-btn copy-btn" onclick="copyToClipboard()">予約内容をコピー</button>
+      <button class="submit-btn copy-btn" onclick="copyToClipboard()">📋 予約内容をコピー</button>
+      <a id="lineShareBtn" class="line-btn" href="#" target="_blank">
+        <span class="line-icon">💬</span>LINEで予約内容を送る
+      </a>
       <button class="back-btn" onclick="backToStep1()">⬅ メニューを選び直す</button>
     </div>
     <div class="section">
       <div class="step-title"><span class="step-badge">B</span>空き状況を確認</div>
       <iframe class="sheet-frame"
-        src="https://script.google.com/macros/s/AKfycbysmWbo5JHPRPMuAkdubDPMDeUEG4zn-aKuBjyUuCN3ix2S6F3C5HVlJhm1Xmeiddc/exec">
+        src="https://script.google.com/macros/s/AKfycbx7yHB6hNPwjoxVxIhnTAFDxZe43e_dFAGHSpUGXrIJauBKsQl0f7mh60YDjEy-gx63/exec">
       </iframe>
     </div>
     <div class="section">
@@ -278,25 +403,17 @@
 </div>
 
 <script>
-  // ==========================================
-  // 状態管理
-  // ==========================================
-  let masterData = { courses: [], options: [] };
+  let masterData     = { courses: [], options: [] };
   let selectedCourses = [];
   let selectedOptions = [];
 
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbwU2U7VUlN6vYBbZ9c4VxEVP0VTf7Uy8lyT0vX9Ie1RhnBnE7n0sdZOnPG9_uHX9TNd/exec";
+  const GAS_URL  = "https://script.google.com/macros/s/AKfycbwU2U7VUlN6vYBbZ9c4VxEVP0VTf7Uy8lyT0vX9Ie1RhnBnE7n0sdZOnPG9_uHX9TNd/exec";
+  const LINE_URL = "https://lin.ee/o1HjTAv";
 
-  // ==========================================
-  // 文字ゆれ正規化
-  // ==========================================
   function normalize(str) {
     return String(str || "").replace(/\s+/g, "").trim();
   }
 
-  // ==========================================
-  // 起動時: GASからデータ取得
-  // ==========================================
   window.onload = () => {
     fetch(GAS_URL)
       .then(res => res.json())
@@ -311,79 +428,88 @@
       })
       .catch(err => {
         document.getElementById('courseList').innerHTML =
-          '<div class="error-msg">データの取得に失敗しました。ページを再読み込みしてください。<br><small>' + err + '</small></div>';
+          '<div class="error-msg">データの取得に失敗しました。再読み込みしてください。<br><small>' + err + '</small></div>';
       });
   };
 
-  // ==========================================
-  // 性別変更 → 選択リセット
-  // ==========================================
+  function handleStatusChange() {
+    const isFirst = document.getElementById('userStatus').value === 'はじめて';
+    document.getElementById('firstBanner').style.display = isFirst ? 'block' : 'none';
+    filterList();
+  }
+
   function handleGenderChange() {
     selectedCourses = [];
     selectedOptions = [];
     filterList();
   }
 
-  // ==========================================
-  // カードHTML生成（説明文つき）
-  // ==========================================
-  function buildCardInner(name, time, price, desc) {
+  function buildBadge(badgeVal) {
+    if (!badgeVal) return '';
+    const v = normalize(badgeVal);
+    if (v === '人気') return '<span class="badge badge-popular">🔥 人気No.1</span>';
+    if (v === '初回') return '<span class="badge badge-first">👋 初回おすすめ</span>';
+    if (v === 'お得') return '<span class="badge badge-value">⭐ お得</span>';
+    return '';
+  }
+
+  function buildCardInner(item, isFirst) {
+    const { name, time, price, desc, badge, firstPrice } = item;
     const timeStr  = formatTimeDisplay(time);
-    const priceStr = '¥' + price.toLocaleString();
-    const descHtml = desc
-      ? `<span class="desc-tag">＊${desc}</span>`
-      : '';
+    const badgeHtml = buildBadge(badge);
+    const descHtml  = desc ? `<span class="desc-tag">＊${desc}</span>` : '';
+
+    let priceHtml = '';
+    if (isFirst && firstPrice && firstPrice < price) {
+      priceHtml = `<span class="price-original">¥${price.toLocaleString()}</span><span class="price-first">✨ ¥${firstPrice.toLocaleString()}</span>`;
+    } else {
+      priceHtml = `<span class="price-normal">¥${price.toLocaleString()}</span>`;
+    }
+
     return `
       <div class="card-left">
-        <b>${name}</b>
-        <span class="time-tag">${timeStr}　　${priceStr}</span>
+        <b>${name}</b>${badgeHtml}
+        <div class="time-price-row">
+          <span class="time-col">${timeStr}</span>
+          <span class="price-col">${priceHtml}</span>
+        </div>
         ${descHtml}
       </div>`;
   }
 
-  // ==========================================
-  // リスト再描画
-  // ==========================================
   function filterList() {
-    const gender = document.getElementById('gender').value;
-    const age    = parseInt(document.getElementById('userAge').value) || 0;
-    const clist  = document.getElementById('courseList');
-    const olist  = document.getElementById('optionList');
+    const gender  = document.getElementById('gender').value;
+    const age     = parseInt(document.getElementById('userAge').value) || 0;
+    const isFirst = document.getElementById('userStatus').value === 'はじめて';
+    const clist   = document.getElementById('courseList');
+    const olist   = document.getElementById('optionList');
+    const oSection     = document.getElementById('optionSection');
+    const oPlaceholder = document.getElementById('optionPlaceholder');
 
     if (!gender) {
       clist.innerHTML = '<div class="loading-msg">性別を選択してください</div>';
-      olist.innerHTML = '<div class="loading-msg">コースを選択すると表示されます</div>';
+      oSection.style.display     = 'none';
+      oPlaceholder.style.display = 'block';
+      oPlaceholder.innerHTML     = '<div class="loading-msg">コースを選択するとオプションが表示されます</div>';
       updateTotal();
       return;
     }
 
-    // 排他アイテム収集
     const bannedItems = new Set();
     selectedCourses.forEach(sc => {
       (sc.data.exclusive || []).forEach(ex => bannedItems.add(normalize(ex)));
-    });
-    selectedOptions.forEach(so => {
-      (so.data.exclusive || []).forEach(ex => bannedItems.add(normalize(ex)));
     });
 
     const selectedCourseIds        = new Set(selectedCourses.map(sc => normalize(sc.data.id)));
     const selectedCourseCategories = new Set(selectedCourses.map(sc => normalize(sc.data.category)));
 
-    // ---- コース一覧描画 ----
+    // ---- コース描画（グレーアウトは非表示） ----
     clist.innerHTML = "";
     let lastCategory = null;
 
     masterData.courses.forEach((c, index) => {
       const cg = normalize(c.gender);
       if (cg !== "共通" && cg !== "全員" && cg !== normalize(gender)) return;
-
-      if (c.category !== lastCategory) {
-        const catLabel = document.createElement('div');
-        catLabel.className = 'category-label';
-        catLabel.textContent = c.category;
-        clist.appendChild(catLabel);
-        lastCategory = c.category;
-      }
 
       const uniqueId    = `course-${index}`;
       const isAgeBanned = c.ageLimit && age > 0 && age > c.ageLimit;
@@ -393,22 +519,33 @@
       const isSelected  = selectedCourses.some(sc => sc.id === uniqueId);
       const isBanned    = isAgeBanned || (isExcluded && !isSelected);
 
+      // グレーアウト対象は非表示（display:noneはCSSで対応済み）
+      // カテゴリラベルは表示するアイテムが存在する場合のみ出す
+      if (!isBanned && c.category !== lastCategory) {
+        const catLabel = document.createElement('div');
+        catLabel.className = 'category-label';
+        catLabel.textContent = c.category;
+        clist.appendChild(catLabel);
+        lastCategory = c.category;
+      }
+
       const div = document.createElement('div');
       div.className = 'item-card' + (isBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
-      div.innerHTML   = buildCardInner(c.name, c.time, c.price, c.desc);
+      div.innerHTML = buildCardInner(c, isFirst);
       div.onclick = () => { if (!isBanned) toggleItem({ id: uniqueId, data: c }, 'course'); };
       clist.appendChild(div);
     });
 
-    // ---- オプション一覧描画 ----
-    olist.innerHTML = "";
-
+    // ---- オプション描画 ----
     if (selectedCourses.length === 0) {
-      olist.innerHTML = '<div class="loading-msg">コースを選択すると表示されます</div>';
+      oSection.style.display     = 'none';
+      oPlaceholder.style.display = 'block';
+      oPlaceholder.innerHTML     = '<div class="loading-msg">コースを選択するとオプションが表示されます</div>';
       updateTotal();
       return;
     }
 
+    olist.innerHTML = "";
     let anyOption = false;
 
     masterData.options.forEach((o, index) => {
@@ -427,37 +564,36 @@
       const isExcluded = bannedItems.has(normalize(o.name))
                       || bannedItems.has("op." + normalize(o.name))
                       || bannedItems.has(normalize(o.id));
-      const uniqueId = `option-${index}`;
+      const uniqueId   = `option-${index}`;
       const isSelected = selectedOptions.some(so => so.id === uniqueId);
       const isBanned   = isExcluded && !isSelected;
 
       const div = document.createElement('div');
-      div.className = 'item-card' + (isBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
-      div.innerHTML   = buildCardInner(o.name, o.time, o.price, o.desc);
+      // オプションカードは専用クラスで差別化
+      div.className = 'item-card option-card' + (isBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
+      div.innerHTML = buildCardInner(o, isFirst);
       div.onclick = () => { if (!isBanned) toggleItem({ id: uniqueId, data: o }, 'option'); };
       olist.appendChild(div);
       anyOption = true;
     });
 
-    if (!anyOption) {
-      olist.innerHTML = '<div class="loading-msg">このコースに追加できるオプションはありません</div>';
+    if (anyOption) {
+      oSection.style.display     = 'block';
+      oPlaceholder.style.display = 'none';
+    } else {
+      oSection.style.display     = 'none';
+      oPlaceholder.style.display = 'block';
+      oPlaceholder.innerHTML     = '<div class="loading-msg">このコースに追加できるオプションはありません</div>';
     }
 
     updateTotal();
   }
 
-  // ==========================================
-  // 選択トグル
-  // ==========================================
   function toggleItem(itemObj, type) {
     if (type === 'course') {
       const idx = selectedCourses.findIndex(sc => sc.id === itemObj.id);
-      if (idx > -1) {
-        selectedCourses.splice(idx, 1);
-        selectedOptions = [];
-      } else {
-        selectedCourses.push(itemObj);
-      }
+      if (idx > -1) { selectedCourses.splice(idx, 1); selectedOptions = []; }
+      else          { selectedCourses.push(itemObj); }
     } else {
       const idx = selectedOptions.findIndex(so => so.id === itemObj.id);
       if (idx > -1) selectedOptions.splice(idx, 1);
@@ -466,21 +602,24 @@
     filterList();
   }
 
-  // ==========================================
-  // 合計更新
-  // ==========================================
   function updateTotal() {
+    const isFirst = document.getElementById('userStatus').value === 'はじめて';
     let t = 0, p = 0;
-    selectedCourses.forEach(c => { t += c.data.time;  p += c.data.price; });
-    selectedOptions.forEach(o => { t += o.data.time;  p += o.data.price; });
+    selectedCourses.forEach(c => {
+      t += c.data.time;
+      p += (isFirst && c.data.firstPrice && c.data.firstPrice < c.data.price)
+        ? c.data.firstPrice : c.data.price;
+    });
+    selectedOptions.forEach(o => {
+      t += o.data.time;
+      p += (isFirst && o.data.firstPrice && o.data.firstPrice < o.data.price)
+        ? o.data.firstPrice : o.data.price;
+    });
     document.getElementById('displayTime').innerText  = formatTimeDisplay(t);
     document.getElementById('displayPrice').innerText = p.toLocaleString();
     return { t, p };
   }
 
-  // ==========================================
-  // 時間フォーマット
-  // ==========================================
   function formatTimeDisplay(min) {
     const m = parseInt(min) || 0;
     if (m === 0) return "0分";
@@ -491,13 +630,11 @@
     return mins + "分";
   }
 
-  // ==========================================
-  // STEP2へ進む
-  // ==========================================
   function goToStep2() {
-    const status = document.getElementById('userStatus').value;
-    const age    = document.getElementById('userAge').value;
-    const gender = document.getElementById('gender').value;
+    const status  = document.getElementById('userStatus').value;
+    const age     = document.getElementById('userAge').value;
+    const gender  = document.getElementById('gender').value;
+    const isFirst = status === 'はじめて';
 
     if (!status) { alert("ご利用回数をお選びください。"); return; }
     if (!age)    { alert("年齢をご入力ください。"); return; }
@@ -506,39 +643,41 @@
 
     const stats = updateTotal();
 
-    let summary = `【セルフィール新宿 予約内容】\n`;
-    summary    += `ご利用：${status}\n`;
-    summary    += `年齢：${age}歳\n`;
-    summary    += `性別：${gender}\n\n`;
-    summary    += `■メニュー\n`;
+    let summary  = `【セルフィール新宿 予約内容】\n`;
+    summary     += `ご利用：${status}\n`;
+    summary     += `年齢：${age}歳\n`;
+    summary     += `性別：${gender}\n\n`;
+    summary     += `■メニュー\n`;
     selectedCourses.forEach(c => {
-      summary += `・${c.data.name} (${formatTimeDisplay(c.data.time)}) / ¥${c.data.price.toLocaleString()}\n`;
+      const p = (isFirst && c.data.firstPrice && c.data.firstPrice < c.data.price)
+        ? c.data.firstPrice : c.data.price;
+      summary += `・${c.data.name} (${formatTimeDisplay(c.data.time)}) / ¥${p.toLocaleString()}\n`;
     });
     selectedOptions.forEach(o => {
+      const p = (isFirst && o.data.firstPrice && o.data.firstPrice < o.data.price)
+        ? o.data.firstPrice : o.data.price;
       summary += `・${o.data.name}`;
       if (o.data.time > 0) summary += ` (${formatTimeDisplay(o.data.time)})`;
-      summary += ` / ¥${o.data.price.toLocaleString()}\n`;
+      summary += ` / ¥${p.toLocaleString()}\n`;
     });
     summary += `\n合計：${formatTimeDisplay(stats.t)} / ¥${stats.p.toLocaleString()}`;
 
     document.getElementById('summaryText').innerText = summary;
+
+    const lineText = encodeURIComponent(summary + "\n\n▼ セルフィール新宿 公式LINE\n" + LINE_URL);
+    document.getElementById('lineShareBtn').href = `https://line.me/R/share?text=${lineText}`;
+
     document.getElementById('step1').style.display = "none";
     document.getElementById('step2').style.display = "block";
     window.scrollTo(0, 0);
   }
 
-  // ==========================================
-  // STEP1へ戻る
-  // ==========================================
   function backToStep1() {
     document.getElementById('step2').style.display = "none";
     document.getElementById('step1').style.display = "block";
     window.scrollTo(0, 0);
   }
 
-  // ==========================================
-  // クリップボードコピー
-  // ==========================================
   function copyToClipboard() {
     const text = document.getElementById('summaryText').innerText;
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -556,8 +695,7 @@
     ta.style.position = 'fixed';
     ta.style.opacity  = '0';
     document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
+    ta.focus(); ta.select();
     try {
       document.execCommand('copy');
       alert("コピーしました！予約フォームへ貼り付けてください。");
