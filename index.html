@@ -43,7 +43,6 @@
       padding: 20px;
       border: 1px solid #f0ece4;
       border-radius: 15px;
-      background: white;
     }
     .step-title {
       font-size: 1.05em;
@@ -65,306 +64,162 @@
       font-size: 0.85em;
       flex-shrink: 0;
     }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      color: #777;
-      font-size: 0.83em;
-    }
+    label { display:block; margin-bottom:6px; font-weight:bold; color:#777; font-size:0.83em; }
     input, select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      font-size: 16px;
+      width: 100%; padding: 13px;
+      border: 1px solid #ddd; border-radius: 10px;
+      margin-bottom: 12px; font-size: 16px;
     }
 
     /* ===== カテゴリラベル ===== */
     .category-label {
-      font-size: 0.76em;
-      font-weight: bold;
-      color: var(--dark-gold);
-      letter-spacing: 1px;
-      margin: 14px 0 5px;
-      padding: 3px 10px;
-      background: var(--bg-creme);
-      border-radius: 6px;
+      font-size: 0.76em; font-weight: bold;
+      color: var(--dark-gold); letter-spacing: 1px;
+      margin: 14px 0 5px; padding: 3px 10px;
+      background: var(--bg-creme); border-radius: 6px;
       display: inline-block;
     }
 
     /* ===== コースカード ===== */
     .item-card {
-      display: flex;
-      align-items: flex-start;
+      display: flex; align-items: flex-start;
       padding: 12px 14px;
-      border: 1px solid #ececec;
-      margin-bottom: 5px;
-      border-radius: 11px;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
+      border: 1px solid #ececec; margin-bottom: 5px;
+      border-radius: 11px; cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
       border-left: 5px solid transparent;
-      user-select: none;
-      -webkit-user-select: none;
     }
-    .item-card:hover {
-      background-color: #fdfaf5;
-      border-color: #e5d9ca;
-    }
-    .item-card.selected {
-      border-left-color: var(--gold);
-      background-color: var(--bg-creme);
-      border-color: #ddd0be;
-    }
-    /* 非表示（排他・年齢制限） */
-    .item-card.hidden { display: none; }
+    .item-card:hover  { background: #fdfaf5; border-color: #e5d9ca; }
+    .item-card.on     { border-left-color: var(--gold); background: var(--bg-creme); border-color: #ddd0be; }
 
-    /* ===== オプションカード（一回り小さく・色違い） ===== */
-    .option-card {
+    /* ===== オプションカード ===== */
+    .opt-card {
       padding: 9px 13px;
-      border-radius: 9px;
-      background-color: #f7f4f0;
-      border: 1px solid #ede8e0;
+      background: #f7f4f0; border: 1px solid #ede8e0;
       border-left: 5px solid transparent;
+      border-radius: 9px; margin-bottom: 5px;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+      display: flex; align-items: flex-start;
     }
-    .option-card:hover {
-      background-color: #f0ebe3;
-      border-color: #d8cfc4;
-    }
-    .option-card.selected {
-      border-left-color: var(--dark-gold);
-      background-color: #ede7dc;
-      border-color: #cfc4b2;
-    }
-    .option-card b { font-size: 0.93em; }
+    .opt-card:hover { background: #f0ebe3; border-color: #d8cfc4; }
+    .opt-card.on    { border-left-color: var(--dark-gold); background: #ede7dc; border-color: #cfc4b2; }
+    .opt-card b     { font-size: 0.93em; }
 
-    /* ===== カード内レイアウト ===== */
     .card-body { flex: 1; min-width: 0; }
-    .card-name-row {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
+    .card-name-row { display:flex; align-items:center; flex-wrap:wrap; gap:4px; }
 
-    /* 時間と料金：flexで両端、最大幅を制限して離れすぎを防ぐ */
     .time-price-row {
-      display: flex;
-      align-items: baseline;
-      margin-top: 3px;
-      font-size: 0.84em;
-      max-width: 320px;   /* PC/タブレットで離れすぎ防止 */
+      display: flex; align-items: baseline;
+      margin-top: 3px; font-size: 0.84em; max-width: 300px;
     }
-    .time-col {
-      color: #888;
-      white-space: nowrap;
-      min-width: 80px;
-    }
-    .price-col {
-      text-align: right;
-      flex: 1;
-      font-weight: bold;
-      padding-left: 8px;
-    }
-    .price-normal   { color: var(--gold); }
-    .price-first    { color: #d94040; }
-    .price-original { color: #bbb; text-decoration: line-through; font-size: 0.85em; margin-right: 4px; font-weight: normal; }
-
-    .desc-tag {
-      font-size: 0.81em;
-      color: #7aab8a;
-      display: block;
-      margin-top: 3px;
-    }
+    .time-col  { color: #888; white-space: nowrap; min-width: 80px; }
+    .price-col { text-align: right; flex: 1; font-weight: bold; padding-left: 6px; }
+    .p-normal  { color: var(--gold); }
+    .p-first   { color: #d94040; }
+    .p-orig    { color: #bbb; text-decoration: line-through; font-size: 0.85em; margin-right: 3px; font-weight: normal; }
+    .desc-tag  { font-size: 0.81em; color: #7aab8a; display: block; margin-top: 3px; }
 
     /* ===== バッジ ===== */
-    .badge {
-      font-size: 0.67em;
-      font-weight: bold;
-      padding: 2px 7px;
-      border-radius: 20px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .badge-popular { background: #e8453c; color: white; }
-    .badge-first   { background: #4a90d9; color: white; }
-    .badge-value   { background: #f5a623; color: white; }
+    .badge { font-size:0.67em; font-weight:bold; padding:2px 7px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+    .badge-popular { background:#e8453c; color:white; }
+    .badge-first   { background:#4a90d9; color:white; }
+    .badge-value   { background:#f5a623; color:white; }
 
     /* ===== オプション区切り ===== */
-    .option-section-label {
-      font-size: 0.79em;
-      font-weight: bold;
-      color: var(--dark-gold);
-      letter-spacing: 1px;
-      margin: 16px 0 7px;
-      padding: 4px 12px;
-      background: #f0ebe3;
-      border-radius: 6px;
-      display: inline-block;
-      border-left: 3px solid var(--dark-gold);
+    .opt-label {
+      font-size:0.79em; font-weight:bold; color:var(--dark-gold);
+      margin:16px 0 7px; padding:4px 12px;
+      background:#f0ebe3; border-radius:6px;
+      display:inline-block; border-left:3px solid var(--dark-gold);
     }
 
     /* ===== 合計エリア ===== */
     .total-area {
-      background: var(--bg-creme);
-      padding: 22px;
-      border-radius: 15px;
-      border: 1px solid #eaddca;
-      text-align: center;
-      margin-top: 20px;
+      background: var(--bg-creme); padding: 22px;
+      border-radius: 15px; border: 1px solid #eaddca;
+      text-align: center; margin-top: 20px;
     }
 
     /* ===== ボタン ===== */
-    .submit-btn {
-      width: 100%;
-      padding: 18px;
+    .btn-gold {
+      display: block; width: 100%; padding: 17px;
       background: linear-gradient(135deg, #d4af37, #b8a07e);
-      color: white;
-      border: none;
-      border-radius: 40px;
-      font-size: 1.1em;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
+      color: white; border: none; border-radius: 40px;
+      font-size: 1.08em; font-weight: bold; cursor: pointer;
       box-shadow: 0 4px 14px rgba(184,160,126,0.3);
+      transition: 0.2s; text-align: center; text-decoration: none;
+      margin-bottom: 8px;
     }
-    .submit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-gold:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-dark {
+      display: block; width: 100%; padding: 15px;
+      background: #4a4a4a; color: white; border: none; border-radius: 40px;
+      font-size: 1em; font-weight: bold; cursor: pointer;
+      transition: 0.2s; margin-bottom: 8px;
+    }
+    .btn-dark:hover { opacity: 0.85; }
+    .btn-line {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 15px;
+      background: var(--line-green); color: white; border: none; border-radius: 40px;
+      font-size: 1em; font-weight: bold; cursor: pointer; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(6,199,85,0.25); transition: 0.2s; margin-bottom: 8px;
+    }
+    .btn-line:hover { opacity: 0.9; transform: translateY(-1px); }
+    .line-icon {
+      width:24px; height:24px; background:white; border-radius:4px;
+      display:flex; align-items:center; justify-content:center; font-size:0.95em; flex-shrink:0;
+    }
+    .btn-back {
+      display: block; width: 100%; padding: 12px;
+      background: white; color: var(--dark-gold);
+      border: 1px solid var(--gold); border-radius: 40px;
+      font-size: 0.93em; cursor: pointer; margin-top: 8px;
+    }
 
     /* ===== STEP2 ===== */
     .summary-box {
-      background: #faf9f5;
-      padding: 18px;
-      border-radius: 10px;
-      border: 1px dashed #dcd8c0;
-      margin-bottom: 12px;
-      font-size: 0.93em;
-      white-space: pre-wrap;
-      color: #333;
+      background: #faf9f5; padding: 16px; border-radius: 10px;
+      border: 1px dashed #dcd8c0; margin-bottom: 12px;
+      font-size: 0.92em; white-space: pre-wrap; color: #333;
     }
-
-    /* フロー説明 */
-    .flow-note {
-      font-size: 0.83em;
-      color: #888;
-      margin-bottom: 12px;
-      line-height: 1.5;
+    .flow-note { font-size: 0.82em; color: #888; margin-bottom: 10px; line-height: 1.6; }
+    .method-bar {
+      display: block; font-size: 0.88em; font-weight: bold; color: white;
+      background: var(--dark-gold); padding: 7px 14px; border-radius: 8px;
+      margin: 16px 0 10px;
     }
-    .flow-note b { color: var(--dark-gold); }
-
-    .copy-btn {
-      width: 100%;
-      padding: 16px;
-      background: #4a4a4a;
-      color: white;
-      border: none;
-      border-radius: 40px;
-      font-size: 1em;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
-      margin-bottom: 8px;
-    }
-    .copy-btn:hover { opacity: 0.85; }
-
-    .line-btn {
-      width: 100%;
-      padding: 16px;
-      background: var(--line-green);
-      color: white;
-      border: none;
-      border-radius: 40px;
-      font-size: 1em;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(6,199,85,0.25);
-      margin-bottom: 8px;
-    }
-    .line-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-    .line-icon {
-      width: 26px; height: 26px;
-      background: white;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1em;
-      flex-shrink: 0;
-    }
-
-    .back-btn {
-      width: 100%;
-      padding: 13px;
-      background: white;
-      color: var(--dark-gold);
-      border: 1px solid var(--gold);
-      border-radius: 40px;
-      font-size: 0.95em;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    .section-note {
-      font-size: 0.82em;
-      color: #999;
-      margin-bottom: 10px;
-    }
+    .section-note { font-size:0.82em; color:#999; margin-bottom:10px; }
 
     .sheet-frame {
-      width: 100%;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      margin-top: 12px;
-      background: #fff;
-      height: 480px;
+      width:100%; border:1px solid #eee; border-radius:12px;
+      margin-top:10px; height:480px;
     }
     .form-frame {
-      width: 100%;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      margin-top: 12px;
-      background: #fff;
-      height: 900px;
+      width:100%; border:1px solid #eee; border-radius:12px;
+      margin-top:10px; height:900px;
     }
-
     .loading-msg { text-align:center; color:#aaa; font-size:0.88em; padding:18px; }
     .error-msg   { text-align:center; color:#e74c3c; font-size:0.88em; padding:18px; }
-
-    /* セクション区切りタイトル */
-    .method-title {
-      font-size: 0.9em;
-      font-weight: bold;
-      color: white;
-      background: var(--dark-gold);
-      padding: 7px 14px;
-      border-radius: 8px;
-      margin: 14px 0 10px;
-      display: block;
-    }
   </style>
 </head>
 <body>
 <div class="container">
   <h2>セルフィール新宿・予約システム</h2>
 
-  <!-- ========== STEP 1 ========== -->
+  <!-- ======== STEP 1 ======== -->
   <div id="step1">
     <div class="section">
       <div class="step-title"><span class="step-badge">1</span>お客様情報をご入力ください（必須）</div>
-      <select id="userStatus" onchange="handleStatusChange()">
+      <select id="userStatus" onchange="onStatusChange()">
         <option value="">セルフィール新宿のご利用は？</option>
         <option value="はじめて">はじめて</option>
         <option value="2回目">2回目</option>
         <option value="3回目以上">3回目以上</option>
       </select>
-      <input type="number" id="userAge" placeholder="年齢" min="1" max="99" oninput="filterList()">
-      <select id="gender" onchange="handleGenderChange()">
+      <input type="number" id="userAge" placeholder="年齢" min="1" max="99" oninput="renderAll()">
+      <select id="gender" onchange="onGenderChange()">
         <option value="">性別を選択（必須）</option>
         <option value="男性">男性</option>
         <option value="女性">女性</option>
@@ -375,68 +230,83 @@
       <div class="step-title"><span class="step-badge">2</span>メニューをお選びください</div>
       <label>コースを選択（複数選択可）</label>
       <div id="courseList"><div class="loading-msg">性別を選択してください</div></div>
-      <div id="optionSection" style="display:none;">
-        <div class="option-section-label">＋ オプションを追加（任意）</div>
+      <div id="optionWrap" style="display:none;">
+        <div class="opt-label">＋ オプションを追加（任意）</div>
         <div id="optionList"></div>
       </div>
-      <div id="optionPlaceholder">
-        <div class="loading-msg">コースを選択するとオプションが表示されます</div>
-      </div>
+      <div id="optionMsg"><div class="loading-msg">コースを選択するとオプションが表示されます</div></div>
     </div>
 
     <div class="total-area">
       <div style="font-size:1.2em;font-weight:bold;">
-        合計時間：<span id="displayTime">0分</span>　料金：¥<span id="displayPrice">0</span>
+        合計時間：<span id="dispTime">0分</span>　料金：¥<span id="dispPrice">0</span>
       </div>
-      <button class="submit-btn" style="margin-top:14px;" onclick="goToStep2()">
+      <button class="btn-gold" style="margin-top:14px;" onclick="goStep2()">
         空き状況の確認へ進む →
       </button>
     </div>
   </div>
 
-  <!-- ========== STEP 2 ========== -->
+  <!-- ======== STEP 2 ======== -->
   <div id="step2" style="display:none;">
 
     <!-- A: 予約内容確認 -->
     <div class="section">
       <div class="step-title"><span class="step-badge">A</span>予約内容を確認する</div>
-      <div class="flow-note">
-        下の空き状況カレンダーで希望日時を確認してから、<b>予約内容をコピー</b>してください。
-      </div>
+      <div class="flow-note">下の空き状況カレンダーで希望日時を確認してから、予約方法（C）に進んでください。</div>
       <div id="summaryText" class="summary-box"></div>
-      <button class="back-btn" onclick="backToStep1()">⬅ メニューを選び直す</button>
+      <button class="btn-back" onclick="backStep1()">⬅ メニューを選び直す</button>
     </div>
 
     <!-- B: 空き状況 -->
     <div class="section">
       <div class="step-title"><span class="step-badge">B</span>空き状況を確認する</div>
-      <div class="section-note">希望日時が決まったら、下のいずれかの方法でご予約ください。</div>
+      <div class="section-note">予約内容の合計時間が、希望日で空いているか確認してください。</div>
       <iframe class="sheet-frame"
-        src="https://script.google.com/macros/s/AKfycbysmWbo5JHPRPMuAkdubDPMDeUEG4zn-aKuBjyUuCN3ix2S6F3C5HVlJhm1Xmeiddc/exec">
+        src="https://script.google.com/macros/s/AKfycbwU2U7VUlN6vYBbZ9c4VxEVP0VTf7Uy8lyT0vX9Ie1RhnBnE7n0sdZOnPG9_uHX9TNd/exec">
       </iframe>
     </div>
 
     <!-- C: 予約方法 -->
     <div class="section">
-      <div class="step-title"><span class="step-badge">C</span>ご予約方法を選んでください</div>
+      <div class="step-title"><span class="step-badge">C</span>ご予約方法を選ぶ</div>
 
-      <!-- 方法①：フォーム（全員表示） -->
-      <span class="method-title">📋 予約内容をコピーして、下のフォームから申し込む</span>
-      <div class="flow-note">
-        ① 予約内容をコピー　② 下のフォームに貼り付け　③ 予約希望日時・お名前などを入力して送信
-      </div>
-      <button class="copy-btn" onclick="copyToClipboard()">📋 予約内容をコピーする</button>
-      <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
-
-      <!-- 方法②：LINE（2回目以上のみ表示） -->
-      <div id="lineSection" style="display:none; margin-top:20px;">
-        <span class="method-title">💬 LINEで直接お問い合わせ・申し込む</span>
+      <!-- 2回目以上 -->
+      <div id="secRepeat" style="display:none;">
+        <span class="method-bar">📋 予約内容をコピーして申し込む</span>
         <div class="flow-note">
-          ① 予約内容をコピー（上のボタン）　② 下のLINEボタンをタップ　③ セルフィール新宿を送信先に選択　④ メッセージ欄に <b>予約希望日時</b> と予約内容を貼り付けて送信
+          ① 下のボタンで予約内容をコピー<br>
+          ② 予約フォームまたはLINEに貼り付け<br>
+          ③ <b>予約希望日時</b>を追記して送信
         </div>
-        <a id="lineShareBtn" class="line-btn" href="#" target="_blank">
+        <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
+
+        <span class="method-bar">💬 LINEでセルフィール新宿に直接申し込む</span>
+        <div class="flow-note">
+          ① 上のボタンで予約内容をコピー<br>
+          ② 下のLINEボタンをタップ<br>
+          ③ セルフィール新宿を送信先に選択<br>
+          ④ メッセージ欄に予約内容を貼り付け、<b>予約希望日時</b>を入力して送信
+        </div>
+        <a id="lineBtn" class="btn-line" href="#" target="_blank">
           <span class="line-icon">💬</span>LINEでセルフィール新宿に送る
         </a>
+
+        <span class="method-bar">📝 予約フォームから申し込む</span>
+        <div class="flow-note">① 上のボタンで予約内容をコピー　② 下のフォームに貼り付けて送信</div>
+        <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
+      </div>
+
+      <!-- はじめて -->
+      <div id="secFirst" style="display:none;">
+        <span class="method-bar">📋 予約を申し込む</span>
+        <div class="flow-note">
+          ① 下のボタンで予約内容をコピー<br>
+          ② 下の予約フォームに貼り付け<br>
+          ③ <b>予約希望日時</b>・お名前などを入力して送信
+        </div>
+        <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
+        <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
       </div>
 
     </div>
@@ -444,366 +314,343 @@
 </div>
 
 <script>
-  // =============================================
-  // 状態管理
-  // selectedCourses / selectedOptions は
-  // { key: string, data: object } の配列
-  // key = コースID（c.id）で一意に管理 ← バグ修正の核心
-  // =============================================
-  let masterData      = { courses: [], options: [] };
-  let selectedCourses = [];
-  let selectedOptions = [];
+// ==============================================
+//  データ・状態
+// ==============================================
+var masterData = { courses: [], options: [] };
 
-  const GAS_URL  = "https://script.google.com/macros/s/AKfycbx7yHB6hNPwjoxVxIhnTAFDxZe43e_dFAGHSpUGXrIJauBKsQl0f7mh60YDjEy-gx63/exec";
-  const LINE_URL = "https://lin.ee/tvzVvYV";
+// 選択状態は「コースID文字列のSet」で管理
+// → DOM再生成に依存しない・解除も確実
+var selCourseIds = new Set(); // e.g. "MC01"
+var selOptionIds = new Set(); // e.g. "OP01"
 
-  function normalize(str) {
-    return String(str || "").replace(/\s+/g, "").trim();
-  }
+var GAS_URL  = "https://script.google.com/macros/s/AKfycbx7yHB6hNPwjoxVxIhnTAFDxZe43e_dFAGHSpUGXrIJauBKsQl0f7mh60YDjEy-gx63/exec";
+var LINE_URL = "https://lin.ee/tvzVvYV";
 
-  // =============================================
-  // データ取得
-  // =============================================
-  window.onload = () => {
-    fetch(GAS_URL)
-      .then(r => r.json())
-      .then(data => {
-        if (data.error) {
-          document.getElementById('courseList').innerHTML =
-            '<div class="error-msg">エラー: ' + data.error + '</div>';
-          return;
-        }
-        masterData = data;
-        filterList();
-      })
-      .catch(err => {
+// ==============================================
+//  起動
+// ==============================================
+window.onload = function() {
+  fetch(GAS_URL)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.error) {
         document.getElementById('courseList').innerHTML =
-          '<div class="error-msg">データ取得に失敗しました。再読み込みしてください。<br><small>' + err + '</small></div>';
-      });
-  };
-
-  // =============================================
-  // イベントハンドラ
-  // =============================================
-  function handleStatusChange() {
-    filterList(); // バナー削除済み、再描画のみ
-  }
-
-  function handleGenderChange() {
-    selectedCourses = [];
-    selectedOptions = [];
-    filterList();
-  }
-
-  // =============================================
-  // バッジHTML
-  // =============================================
-  function buildBadge(badgeVal) {
-    const v = normalize(badgeVal || '');
-    if (v === '人気') return '<span class="badge badge-popular">🔥 人気N0.1</span>';
-    if (v === 'おすすめ') return '<span class="badge badge-first">👋 リピNo.1</span>';
-    if (v === 'NEW') return '<span class="badge badge-value">⭐ NEW!</span>';
-    return '';
-  }
-
-  // =============================================
-  // カード内HTML
-  // =============================================
-  function buildCardInner(item, isFirst) {
-    const timeStr  = formatTimeDisplay(item.time);
-    const badgeHtml = buildBadge(item.badge);
-    const descHtml  = item.desc ? `<span class="desc-tag">＊${item.desc}</span>` : '';
-
-    let priceHtml;
-    if (isFirst && item.firstPrice && item.firstPrice < item.price) {
-      priceHtml = `<span class="price-original">¥${item.price.toLocaleString()}</span>`
-                + `<span class="price-first">✨ ¥${item.firstPrice.toLocaleString()}</span>`;
-    } else {
-      priceHtml = `<span class="price-normal">¥${item.price.toLocaleString()}</span>`;
-    }
-
-    return `<div class="card-body">
-      <div class="card-name-row"><b>${item.name}</b>${badgeHtml}</div>
-      <div class="time-price-row">
-        <span class="time-col">${timeStr}</span>
-        <span class="price-col">${priceHtml}</span>
-      </div>
-      ${descHtml}
-    </div>`;
-  }
-
-  // =============================================
-  // リスト再描画
-  // ★ key = c.id（固有IDで管理）に統一して
-  //   filterList再描画後も選択状態を正しく保持
-  // =============================================
-  function filterList() {
-    const gender  = document.getElementById('gender').value;
-    const age     = parseInt(document.getElementById('userAge').value) || 0;
-    const isFirst = document.getElementById('userStatus').value === 'はじめて';
-    const clist   = document.getElementById('courseList');
-    const olist   = document.getElementById('optionList');
-    const oSec    = document.getElementById('optionSection');
-    const oPH     = document.getElementById('optionPlaceholder');
-
-    if (!gender) {
-      clist.innerHTML = '<div class="loading-msg">性別を選択してください</div>';
-      oSec.style.display = 'none';
-      oPH.style.display  = 'block';
-      oPH.innerHTML      = '<div class="loading-msg">コースを選択するとオプションが表示されます</div>';
-      updateTotal();
-      return;
-    }
-
-    // 現在選択中のkey（IDセット）
-    const selectedCourseKeys = new Set(selectedCourses.map(sc => sc.key));
-    const selectedOptionKeys = new Set(selectedOptions.map(so => so.key));
-
-    // 排他アイテムを収集
-    const bannedItems = new Set();
-    selectedCourses.forEach(sc => {
-      (sc.data.exclusive || []).forEach(ex => bannedItems.add(normalize(ex)));
-    });
-
-    const selectedCourseIds  = new Set(selectedCourses.map(sc => normalize(sc.data.id)));
-    const selectedCourseCats = new Set(selectedCourses.map(sc => normalize(sc.data.category)));
-
-    // ---- コース描画 ----
-    clist.innerHTML = '';
-    let lastCat = null;
-
-    masterData.courses.forEach(c => {
-      const cg = normalize(c.gender);
-      if (cg !== '共通' && cg !== '全員' && cg !== normalize(gender)) return;
-
-      const key         = 'course:' + c.id;
-      const isAgeBanned = c.ageLimit && age > 0 && age > c.ageLimit;
-      const isExcluded  = bannedItems.has(normalize(c.name))
-                       || bannedItems.has(normalize(c.id))
-                       || bannedItems.has(normalize(c.category));
-      const isSelected  = selectedCourseKeys.has(key);
-      const isBanned    = isAgeBanned || (isExcluded && !isSelected);
-
-      // 非表示の場合はDOM自体を追加しない
-      if (isBanned) return;
-
-      // カテゴリラベル（初登場時のみ）
-      if (c.category !== lastCat) {
-        const lbl = document.createElement('div');
-        lbl.className   = 'category-label';
-        lbl.textContent = c.category;
-        clist.appendChild(lbl);
-        lastCat = c.category;
+          '<div class="error-msg">エラー: ' + data.error + '</div>';
+        return;
       }
-
-      const div = document.createElement('div');
-      div.className = 'item-card' + (isSelected ? ' selected' : '');
-      div.innerHTML = buildCardInner(c, isFirst);
-      div.addEventListener('click', () => toggleCourse(key, c));
-      clist.appendChild(div);
+      masterData = data;
+      renderAll();
+    })
+    .catch(function(e){
+      document.getElementById('courseList').innerHTML =
+        '<div class="error-msg">データ取得に失敗しました。再読み込みしてください。</div>';
     });
+};
 
-    // ---- オプション描画 ----
-    if (selectedCourses.length === 0) {
-      oSec.style.display = 'none';
-      oPH.style.display  = 'block';
-      oPH.innerHTML      = '<div class="loading-msg">コースを選択するとオプションが表示されます</div>';
-      updateTotal();
-      return;
+// ==============================================
+//  イベントハンドラ
+// ==============================================
+function onStatusChange() { renderAll(); }
+
+function onGenderChange() {
+  selCourseIds = new Set();
+  selOptionIds = new Set();
+  renderAll();
+}
+
+// ==============================================
+//  ユーティリティ
+// ==============================================
+function norm(s) { return String(s || '').replace(/\s+/g,'').trim(); }
+
+function fmt(min) {
+  var m = parseInt(min)||0; if(!m) return '0分';
+  var h=Math.floor(m/60), r=m%60;
+  return h&&r ? h+'時間'+r+'分' : h ? h+'時間' : r+'分';
+}
+
+function badge(v) {
+  var n = norm(v);
+  if (n==='人気')    return '<span class="badge badge-popular">🔥 人気No.1</span>';
+  if (n==='おすすめ') return '<span class="badge badge-first">👋 リピNo.1</span>';
+  if (n==='NEW')    return '<span class="badge badge-value">⭐ NEW!</span>';
+  return '';
+}
+
+function priceHtml(item, isFirst) {
+  if (isFirst && item.firstPrice && item.firstPrice < item.price) {
+    return '<span class="p-orig">¥'+item.price.toLocaleString()+'</span>'
+         + '<span class="p-first">✨ ¥'+item.firstPrice.toLocaleString()+'</span>';
+  }
+  return '<span class="p-normal">¥'+item.price.toLocaleString()+'</span>';
+}
+
+function cardBody(item, isFirst) {
+  return '<div class="card-body">'
+    + '<div class="card-name-row"><b>'+item.name+'</b>'+badge(item.badge)+'</div>'
+    + '<div class="time-price-row">'
+    +   '<span class="time-col">'+fmt(item.time)+'</span>'
+    +   '<span class="price-col">'+priceHtml(item,isFirst)+'</span>'
+    + '</div>'
+    + (item.desc ? '<span class="desc-tag">＊'+item.desc+'</span>' : '')
+    + '</div>';
+}
+
+// 実際の料金（初回割引考慮）
+function realPrice(item, isFirst) {
+  return (isFirst && item.firstPrice && item.firstPrice < item.price)
+    ? item.firstPrice : item.price;
+}
+
+// ==============================================
+//  選択中コースのデータ取得
+// ==============================================
+function getSelCourses() {
+  return masterData.courses.filter(function(c){ return selCourseIds.has(c.id); });
+}
+function getSelOptions() {
+  return masterData.options.filter(function(o){ return selOptionIds.has(o.id); });
+}
+
+// ==============================================
+//  排他セット構築
+// ==============================================
+function buildBanned() {
+  var banned = new Set();
+  getSelCourses().forEach(function(c){
+    (c.exclusive||[]).forEach(function(ex){ banned.add(norm(ex)); });
+  });
+  return banned;
+}
+
+// ==============================================
+//  全体再描画（メイン）
+// ==============================================
+function renderAll() {
+  var gender  = document.getElementById('gender').value;
+  var age     = parseInt(document.getElementById('userAge').value)||0;
+  var isFirst = document.getElementById('userStatus').value === 'はじめて';
+
+  var clist = document.getElementById('courseList');
+  var olist = document.getElementById('optionList');
+  var oWrap = document.getElementById('optionWrap');
+  var oMsg  = document.getElementById('optionMsg');
+
+  if (!gender) {
+    clist.innerHTML = '<div class="loading-msg">性別を選択してください</div>';
+    oWrap.style.display = 'none';
+    oMsg.style.display  = 'block';
+    oMsg.innerHTML = '<div class="loading-msg">コースを選択するとオプションが表示されます</div>';
+    updTotal();
+    return;
+  }
+
+  var banned        = buildBanned();
+  var selCatSet     = new Set(getSelCourses().map(function(c){ return norm(c.category); }));
+  var selIdSet      = new Set(Array.from(selCourseIds));
+
+  // ---- コース描画 ----
+  clist.innerHTML = '';
+  var lastCat = null;
+
+  masterData.courses.forEach(function(c) {
+    var cg = norm(c.gender);
+    if (cg!=='共通' && cg!=='全員' && cg!==norm(gender)) return;
+
+    var isAgeBan  = c.ageLimit && age>0 && age>c.ageLimit;
+    var isSel     = selCourseIds.has(c.id);
+    var isExclude = banned.has(norm(c.name)) || banned.has(norm(c.id)) || banned.has(norm(c.category));
+    var isBanned  = isAgeBan || (isExclude && !isSel);
+    if (isBanned) return; // 非表示
+
+    if (c.category !== lastCat) {
+      var lbl = document.createElement('div');
+      lbl.className = 'category-label';
+      lbl.textContent = c.category;
+      clist.appendChild(lbl);
+      lastCat = c.category;
     }
 
-    olist.innerHTML = '';
-    let hasOpt = false;
+    var div = document.createElement('div');
+    div.className = 'item-card' + (isSel ? ' on' : '');
+    div.innerHTML = cardBody(c, isFirst);
+    // data-id属性でIDを保持 → クロージャ問題を回避
+    div.setAttribute('data-id', c.id);
+    div.setAttribute('data-type', 'course');
+    div.onclick = handleCardClick;
+    clist.appendChild(div);
+  });
 
-    masterData.options.forEach(o => {
-      const og = normalize(o.gender);
-      if (og !== '共通' && og !== '全員' && og !== normalize(gender)) return;
+  // ---- オプション描画 ----
+  if (selCourseIds.size === 0) {
+    oWrap.style.display = 'none';
+    oMsg.style.display  = 'block';
+    oMsg.innerHTML = '<div class="loading-msg">コースを選択するとオプションが表示されます</div>';
+    updTotal();
+    return;
+  }
 
-      // 紐付け条件
-      const cond = o.condition || ['全て'];
-      const isAll = !cond.length || cond.includes('全て') || cond.includes('全員');
-      if (!isAll) {
-        const met = cond.some(c =>
-          selectedCourseIds.has(normalize(c)) || selectedCourseCats.has(normalize(c))
-        );
-        if (!met) return;
-      }
+  olist.innerHTML = '';
+  var hasOpt = false;
 
-      const key        = 'option:' + o.id;
-      const isExcluded = bannedItems.has(normalize(o.name))
-                      || bannedItems.has('op.' + normalize(o.name))
-                      || bannedItems.has(normalize(o.id));
-      const isSelected = selectedOptionKeys.has(key);
-      const isBanned   = isExcluded && !isSelected;
-      if (isBanned) return;
+  masterData.options.forEach(function(o) {
+    var og = norm(o.gender);
+    if (og!=='共通' && og!=='全員' && og!==norm(gender)) return;
 
-      const div = document.createElement('div');
-      div.className = 'item-card option-card' + (isSelected ? ' selected' : '');
-      div.innerHTML = buildCardInner(o, isFirst);
-      div.addEventListener('click', () => toggleOption(key, o));
-      olist.appendChild(div);
-      hasOpt = true;
-    });
+    // 紐付け条件
+    var cond = o.condition || ['全て'];
+    var isAll = !cond.length || cond.indexOf('全て')>=0 || cond.indexOf('全員')>=0;
+    if (!isAll) {
+      var met = cond.some(function(c){ return selIdSet.has(norm(c)) || selCatSet.has(norm(c)); });
+      if (!met) return;
+    }
 
-    if (hasOpt) {
-      oSec.style.display = 'block';
-      oPH.style.display  = 'none';
+    var isSel    = selOptionIds.has(o.id);
+    var isExclude= banned.has(norm(o.name)) || banned.has('op.'+norm(o.name)) || banned.has(norm(o.id));
+    var isBanned = isExclude && !isSel;
+    if (isBanned) return;
+
+    var div = document.createElement('div');
+    div.className = 'opt-card' + (isSel ? ' on' : '');
+    div.innerHTML = cardBody(o, isFirst);
+    div.setAttribute('data-id', o.id);
+    div.setAttribute('data-type', 'option');
+    div.onclick = handleCardClick;
+    olist.appendChild(div);
+    hasOpt = true;
+  });
+
+  oWrap.style.display = hasOpt ? 'block' : 'none';
+  oMsg.style.display  = hasOpt ? 'none'  : 'block';
+  if (!hasOpt) oMsg.innerHTML = '<div class="loading-msg">このコースに追加できるオプションはありません</div>';
+
+  updTotal();
+}
+
+// ==============================================
+//  カードクリック（data-id / data-type で判定）
+// ==============================================
+function handleCardClick(e) {
+  var div  = e.currentTarget;
+  var id   = div.getAttribute('data-id');
+  var type = div.getAttribute('data-type');
+
+  if (type === 'course') {
+    if (selCourseIds.has(id)) {
+      selCourseIds.delete(id);
+      selOptionIds = new Set(); // コース解除 → オプションリセット
     } else {
-      oSec.style.display = 'none';
-      oPH.style.display  = 'block';
-      oPH.innerHTML      = '<div class="loading-msg">このコースに追加できるオプションはありません</div>';
+      selCourseIds.add(id);
     }
-
-    updateTotal();
-  }
-
-  // =============================================
-  // トグル（コース）
-  // =============================================
-  function toggleCourse(key, data) {
-    const idx = selectedCourses.findIndex(sc => sc.key === key);
-    if (idx > -1) {
-      // 解除：オプションもリセット
-      selectedCourses.splice(idx, 1);
-      selectedOptions = [];
+  } else {
+    if (selOptionIds.has(id)) {
+      selOptionIds.delete(id);
     } else {
-      selectedCourses.push({ key, data });
-    }
-    filterList();
-  }
-
-  // =============================================
-  // トグル（オプション）
-  // =============================================
-  function toggleOption(key, data) {
-    const idx = selectedOptions.findIndex(so => so.key === key);
-    if (idx > -1) {
-      selectedOptions.splice(idx, 1);
-    } else {
-      selectedOptions.push({ key, data });
-    }
-    filterList();
-  }
-
-  // =============================================
-  // 合計更新
-  // =============================================
-  function updateTotal() {
-    const isFirst = document.getElementById('userStatus').value === 'はじめて';
-    let t = 0, p = 0;
-    selectedCourses.forEach(({ data: c }) => {
-      t += c.time;
-      p += (isFirst && c.firstPrice && c.firstPrice < c.price) ? c.firstPrice : c.price;
-    });
-    selectedOptions.forEach(({ data: o }) => {
-      t += o.time;
-      p += (isFirst && o.firstPrice && o.firstPrice < o.price) ? o.firstPrice : o.price;
-    });
-    document.getElementById('displayTime').innerText  = formatTimeDisplay(t);
-    document.getElementById('displayPrice').innerText = p.toLocaleString();
-    return { t, p };
-  }
-
-  // =============================================
-  // 時間フォーマット
-  // =============================================
-  function formatTimeDisplay(min) {
-    const m = parseInt(min) || 0;
-    if (!m) return '0分';
-    const h = Math.floor(m / 60), r = m % 60;
-    return h && r ? h + '時間' + r + '分' : h ? h + '時間' : r + '分';
-  }
-
-  // =============================================
-  // STEP2へ進む
-  // =============================================
-  function goToStep2() {
-    const status  = document.getElementById('userStatus').value;
-    const age     = document.getElementById('userAge').value;
-    const gender  = document.getElementById('gender').value;
-    const isFirst = status === 'はじめて';
-    const isRepeat = (status === '2回目' || status === '3回目以上');
-
-    if (!status)                      { alert('ご利用回数をお選びください。'); return; }
-    if (!age)                         { alert('年齢をご入力ください。'); return; }
-    if (!gender)                      { alert('性別をお選びください。'); return; }
-    if (selectedCourses.length === 0) { alert('コースをお選びください。'); return; }
-
-    const { t, p } = updateTotal();
-
-    // サマリー生成
-    let summary = '【セルフィール新宿 予約内容】\n';
-    summary += 'ご利用：' + status + '\n';
-    summary += '年齢：' + age + '歳\n';
-    summary += '性別：' + gender + '\n\n';
-    summary += '■メニュー\n';
-    selectedCourses.forEach(({ data: c }) => {
-      const cp = (isFirst && c.firstPrice && c.firstPrice < c.price) ? c.firstPrice : c.price;
-      summary += '・' + c.name + ' (' + formatTimeDisplay(c.time) + ') / ¥' + cp.toLocaleString() + '\n';
-    });
-    selectedOptions.forEach(({ data: o }) => {
-      const op = (isFirst && o.firstPrice && o.firstPrice < o.price) ? o.firstPrice : o.price;
-      summary += '・' + o.name;
-      if (o.time > 0) summary += ' (' + formatTimeDisplay(o.time) + ')';
-      summary += ' / ¥' + op.toLocaleString() + '\n';
-    });
-    summary += '\n合計：' + formatTimeDisplay(t) + ' / ¥' + p.toLocaleString();
-    summary += '\n\n※予約希望日時をご記入ください';
-
-    document.getElementById('summaryText').innerText = summary;
-
-    // LINEボタン：2回目以上のみ表示
-    const lineSection = document.getElementById('lineSection');
-    lineSection.style.display = isRepeat ? 'block' : 'none';
-
-    if (isRepeat) {
-      const lineText = encodeURIComponent(summary + '\n\n▼セルフィール新宿 公式LINE\n' + LINE_URL);
-      document.getElementById('lineShareBtn').href = 'https://line.me/R/share?text=' + lineText;
-    }
-
-    document.getElementById('step1').style.display = 'none';
-    document.getElementById('step2').style.display = 'block';
-    window.scrollTo(0, 0);
-  }
-
-  // =============================================
-  // STEP1へ戻る
-  // =============================================
-  function backToStep1() {
-    document.getElementById('step2').style.display = 'none';
-    document.getElementById('step1').style.display = 'block';
-    window.scrollTo(0, 0);
-  }
-
-  // =============================================
-  // コピー
-  // =============================================
-  function copyToClipboard() {
-    const text = document.getElementById('summaryText').innerText;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text)
-        .then(() => alert('コピーしました！\nフォームまたはLINEに貼り付けて、予約希望日時を入力して送信してください。'))
-        .catch(() => fallbackCopy(text));
-    } else {
-      fallbackCopy(text);
+      selOptionIds.add(id);
     }
   }
+  renderAll();
+}
 
-  function fallbackCopy(text) {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;opacity:0;';
-    document.body.appendChild(ta);
-    ta.focus(); ta.select();
-    try {
-      document.execCommand('copy');
-      alert('コピーしました！\nフォームまたはLINEに貼り付けて、予約希望日時を入力して送信してください。');
-    } catch(e) {
-      alert('コピーに失敗しました。手動でコピーしてください。');
-    }
-    document.body.removeChild(ta);
+// ==============================================
+//  合計更新
+// ==============================================
+function updTotal() {
+  var isFirst = document.getElementById('userStatus').value === 'はじめて';
+  var t=0, p=0;
+  getSelCourses().forEach(function(c){ t+=c.time; p+=realPrice(c,isFirst); });
+  getSelOptions().forEach(function(o){ t+=o.time; p+=realPrice(o,isFirst); });
+  document.getElementById('dispTime').innerText  = fmt(t);
+  document.getElementById('dispPrice').innerText = p.toLocaleString();
+  return {t:t, p:p};
+}
+
+// ==============================================
+//  STEP2へ進む
+// ==============================================
+function goStep2() {
+  var status   = document.getElementById('userStatus').value;
+  var age      = document.getElementById('userAge').value;
+  var gender   = document.getElementById('gender').value;
+  var isFirst  = status === 'はじめて';
+  var isRepeat = (status === '2回目' || status === '3回目以上');
+
+  if (!status)             { alert('ご利用回数をお選びください。'); return; }
+  if (!age)                { alert('年齢をご入力ください。'); return; }
+  if (!gender)             { alert('性別をお選びください。'); return; }
+  if (selCourseIds.size===0){ alert('コースをお選びください。'); return; }
+
+  var tp = updTotal();
+
+  var sum = '【セルフィール新宿 予約内容】\n'
+          + 'ご利用：'+status+'\n'
+          + '年齢：'+age+'歳\n'
+          + '性別：'+gender+'\n\n'
+          + '■メニュー\n';
+  getSelCourses().forEach(function(c){
+    sum += '・'+c.name+' ('+fmt(c.time)+') / ¥'+realPrice(c,isFirst).toLocaleString()+'\n';
+  });
+  getSelOptions().forEach(function(o){
+    sum += '・'+o.name;
+    if (o.time>0) sum += ' ('+fmt(o.time)+')';
+    sum += ' / ¥'+realPrice(o,isFirst).toLocaleString()+'\n';
+  });
+  sum += '\n合計：'+fmt(tp.t)+' / ¥'+tp.p.toLocaleString();
+  sum += '\n\n【予約希望日時】\n';
+
+  document.getElementById('summaryText').innerText = sum;
+
+  // C：利用回数で表示切替
+  document.getElementById('secRepeat').style.display = isRepeat ? 'block' : 'none';
+  document.getElementById('secFirst').style.display  = isFirst  ? 'block' : 'none';
+
+  if (isRepeat) {
+    var lt = encodeURIComponent(sum+'\n▼セルフィール新宿 公式LINE\n'+LINE_URL);
+    document.getElementById('lineBtn').href = 'https://line.me/R/share?text='+lt;
   }
+
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+// ==============================================
+//  STEP1へ戻る（選択状態は保持）
+// ==============================================
+function backStep1() {
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step1').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+// ==============================================
+//  コピー（利用回数で文言変更）
+// ==============================================
+function doCopy() {
+  var text     = document.getElementById('summaryText').innerText;
+  var isFirst  = document.getElementById('userStatus').value === 'はじめて';
+  var msg = isFirst
+    ? 'コピーしました！\n下の予約フォームに貼り付けて、予約希望日時・お名前などを入力して送信してください。'
+    : 'コピーしました！\n予約フォームまたはLINEに貼り付けて、予約希望日時を入力して送信してください。';
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function(){ alert(msg); }).catch(function(){ fbCopy(text,msg); });
+  } else {
+    fbCopy(text, msg);
+  }
+}
+
+function fbCopy(text, msg) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); alert(msg); }
+  catch(e){ alert('コピーに失敗しました。手動でコピーしてください。'); }
+  document.body.removeChild(ta);
+}
 </script>
 </body>
 </html>
-
