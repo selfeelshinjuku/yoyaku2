@@ -253,7 +253,7 @@
     <!-- A: 予約内容確認 -->
     <div class="section">
       <div class="step-title"><span class="step-badge">A</span>予約内容を確認する</div>
-      <div class="flow-note">下の空き状況カレンダーで希望日時を確認してから、予約方法（C）に進んでください。</div>
+      <div class="flow-note">下の空き状況（B）で希望日時を確認してから、予約方法（C）に進んでください。</div>
       <div id="summaryText" class="summary-box"></div>
       <button class="btn-back" onclick="backStep1()">⬅ メニューを選び直す</button>
     </div>
@@ -263,13 +263,13 @@
       <div class="step-title"><span class="step-badge">B</span>空き状況を確認する</div>
       <div class="section-note">予約内容の合計時間が、希望日で空いているか確認してください。</div>
       <iframe class="sheet-frame"
-        src="https://script.google.com/macros/s/AKfycbwU2U7VUlN6vYBbZ9c4VxEVP0VTf7Uy8lyT0vX9Ie1RhnBnE7n0sdZOnPG9_uHX9TNd/exec">
+        src="https://script.google.com/macros/s/AKfycbysmWbo5JHPRPMuAkdubDPMDeUEG4zn-aKuBjyUuCN3ix2S6F3C5HVlJhm1Xmeiddc/exec">
       </iframe>
     </div>
 
     <!-- C: 予約方法 -->
     <div class="section">
-      <div class="step-title"><span class="step-badge">C</span>ご予約方法を選ぶ</div>
+      <div class="step-title"><span class="step-badge">C</span>予約を申し込む</div>
 
       <!-- 2回目以上 -->
       <div id="secRepeat" style="display:none;">
@@ -281,7 +281,7 @@
         </div>
         <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
 
-        <span class="method-bar">💬 LINEでセルフィール新宿に直接申し込む</span>
+        <span class="method-bar">💬 LINEで予約を申し込む</span>
         <div class="flow-note">
           ① 上のボタンで予約内容をコピー<br>
           ② 下のLINEボタンをタップ<br>
@@ -302,7 +302,7 @@
         <span class="method-bar">📋 予約を申し込む</span>
         <div class="flow-note">
           ① 下のボタンで予約内容をコピー<br>
-          ② 下の予約フォームに貼り付け<br>
+          ② 予約申込フォームに貼り付け<br>
           ③ <b>予約希望日時</b>・お名前などを入力して送信
         </div>
         <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
@@ -532,7 +532,9 @@ function renderAll() {
 //  カードクリック（data-id / data-type で判定）
 // ==============================================
 function handleCardClick(e) {
-  var div  = e.currentTarget;
+  // 子要素（b, span等）がクリックされても必ず親カードのdata-idを取得
+  var div  = e.target.closest('[data-id]');
+  if (!div) return;
   var id   = div.getAttribute('data-id');
   var type = div.getAttribute('data-type');
 
