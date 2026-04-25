@@ -216,10 +216,10 @@
   </style>
 </head>
 <body>
- 
+
 <div class="container">
   <h2>セルフィール新宿・予約システム</h2>
- 
+
   <!-- STEP 1: メニュー選択 -->
   <div id="step1">
     <div class="section">
@@ -237,7 +237,7 @@
         <option value="女性">女性</option>
       </select>
     </div>
- 
+
     <div class="section">
       <div class="step-title"><span class="step-badge">2</span>メニューをお選びください</div>
       <label>コースを選択（複数選択可）※選択後、組み合わせ不可コースは消えます</label>
@@ -245,7 +245,7 @@
       <label style="margin-top:20px;">オプションを追加（任意・複数選択可）</label>
       <div id="optionList"><div class="loading-msg">コースを選択すると表示されます</div></div>
     </div>
- 
+
     <div class="total-area">
       <div style="font-size: 1.25em; font-weight: bold;">
         合計時間: <span id="displayTime">0分</span> / 料金: ¥<span id="displayPrice">0</span>
@@ -255,7 +255,7 @@
       </button>
     </div>
   </div>
- 
+
   <!-- STEP 2: 確認・予約 -->
   <div id="step2" style="display:none;">
     <div class="section">
@@ -267,7 +267,7 @@
     <div class="section">
       <div class="step-title"><span class="step-badge">B</span>空き状況を確認</div>
       <iframe class="sheet-frame"
-        src="https://script.google.com/macros/s/AKfycbwU2U7VUlN6vYBbZ9c4VxEVP0VTf7Uy8lyT0vX9Ie1RhnBnE7n0sdZOnPG9_uHX9TNd/exec">
+        src="https://script.google.com/macros/s/AKfycbysmWbo5JHPRPMuAkdubDPMDeUEG4zn-aKuBjyUuCN3ix2S6F3C5HVlJhm1Xmeiddc/exec">
       </iframe>
     </div>
     <div class="section">
@@ -276,7 +276,7 @@
     </div>
   </div>
 </div>
- 
+
 <script>
   // ==========================================
   // 状態管理
@@ -284,16 +284,16 @@
   let masterData = { courses: [], options: [] };
   let selectedCourses = [];
   let selectedOptions = [];
- 
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbwv7E2lqdq4zS-WzUNixgsURwmNERoZXcGYX5_7HHRvE_5XK2lWta5lKxMn4wrjJIpd/exec";
- 
+
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbwU2U7VUlN6vYBbZ9c4VxEVP0VTf7Uy8lyT0vX9Ie1RhnBnE7n0sdZOnPG9_uHX9TNd/exec";
+
   // ==========================================
   // 文字ゆれ正規化
   // ==========================================
   function normalize(str) {
     return String(str || "").replace(/\s+/g, "").trim();
   }
- 
+
   // ==========================================
   // 起動時: GASからデータ取得
   // ==========================================
@@ -314,7 +314,7 @@
           '<div class="error-msg">データの取得に失敗しました。ページを再読み込みしてください。<br><small>' + err + '</small></div>';
       });
   };
- 
+
   // ==========================================
   // 性別変更 → 選択リセット
   // ==========================================
@@ -323,7 +323,7 @@
     selectedOptions = [];
     filterList();
   }
- 
+
   // ==========================================
   // カードHTML生成（説明文つき）
   // ==========================================
@@ -340,7 +340,7 @@
         ${descHtml}
       </div>`;
   }
- 
+
   // ==========================================
   // リスト再描画
   // ==========================================
@@ -349,14 +349,14 @@
     const age    = parseInt(document.getElementById('userAge').value) || 0;
     const clist  = document.getElementById('courseList');
     const olist  = document.getElementById('optionList');
- 
+
     if (!gender) {
       clist.innerHTML = '<div class="loading-msg">性別を選択してください</div>';
       olist.innerHTML = '<div class="loading-msg">コースを選択すると表示されます</div>';
       updateTotal();
       return;
     }
- 
+
     // 排他アイテム収集
     const bannedItems = new Set();
     selectedCourses.forEach(sc => {
@@ -365,18 +365,18 @@
     selectedOptions.forEach(so => {
       (so.data.exclusive || []).forEach(ex => bannedItems.add(normalize(ex)));
     });
- 
+
     const selectedCourseIds        = new Set(selectedCourses.map(sc => normalize(sc.data.id)));
     const selectedCourseCategories = new Set(selectedCourses.map(sc => normalize(sc.data.category)));
- 
+
     // ---- コース一覧描画 ----
     clist.innerHTML = "";
     let lastCategory = null;
- 
+
     masterData.courses.forEach((c, index) => {
       const cg = normalize(c.gender);
       if (cg !== "共通" && cg !== "全員" && cg !== normalize(gender)) return;
- 
+
       if (c.category !== lastCategory) {
         const catLabel = document.createElement('div');
         catLabel.className = 'category-label';
@@ -384,7 +384,7 @@
         clist.appendChild(catLabel);
         lastCategory = c.category;
       }
- 
+
       const uniqueId    = `course-${index}`;
       const isAgeBanned = c.ageLimit && age > 0 && age > c.ageLimit;
       const isExcluded  = bannedItems.has(normalize(c.name))
@@ -392,29 +392,29 @@
                        || bannedItems.has(normalize(c.category));
       const isSelected  = selectedCourses.some(sc => sc.id === uniqueId);
       const isBanned    = isAgeBanned || (isExcluded && !isSelected);
- 
+
       const div = document.createElement('div');
       div.className = 'item-card' + (isBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
       div.innerHTML   = buildCardInner(c.name, c.time, c.price, c.desc);
       div.onclick = () => { if (!isBanned) toggleItem({ id: uniqueId, data: c }, 'course'); };
       clist.appendChild(div);
     });
- 
+
     // ---- オプション一覧描画 ----
     olist.innerHTML = "";
- 
+
     if (selectedCourses.length === 0) {
       olist.innerHTML = '<div class="loading-msg">コースを選択すると表示されます</div>';
       updateTotal();
       return;
     }
- 
+
     let anyOption = false;
- 
+
     masterData.options.forEach((o, index) => {
       const og = normalize(o.gender);
       if (og !== "共通" && og !== "全員" && og !== normalize(gender)) return;
- 
+
       const cond = o.condition || ["全て"];
       const isAllCond = cond.length === 0 || cond.includes("全て") || cond.includes("全員");
       if (!isAllCond) {
@@ -423,14 +423,14 @@
         );
         if (!condMet) return;
       }
- 
+
       const isExcluded = bannedItems.has(normalize(o.name))
                       || bannedItems.has("op." + normalize(o.name))
                       || bannedItems.has(normalize(o.id));
       const uniqueId = `option-${index}`;
       const isSelected = selectedOptions.some(so => so.id === uniqueId);
       const isBanned   = isExcluded && !isSelected;
- 
+
       const div = document.createElement('div');
       div.className = 'item-card' + (isBanned ? ' disabled' : '') + (isSelected ? ' selected' : '');
       div.innerHTML   = buildCardInner(o.name, o.time, o.price, o.desc);
@@ -438,14 +438,14 @@
       olist.appendChild(div);
       anyOption = true;
     });
- 
+
     if (!anyOption) {
       olist.innerHTML = '<div class="loading-msg">このコースに追加できるオプションはありません</div>';
     }
- 
+
     updateTotal();
   }
- 
+
   // ==========================================
   // 選択トグル
   // ==========================================
@@ -465,7 +465,7 @@
     }
     filterList();
   }
- 
+
   // ==========================================
   // 合計更新
   // ==========================================
@@ -477,7 +477,7 @@
     document.getElementById('displayPrice').innerText = p.toLocaleString();
     return { t, p };
   }
- 
+
   // ==========================================
   // 時間フォーマット
   // ==========================================
@@ -490,7 +490,7 @@
     if (h > 0)              return h + "時間";
     return mins + "分";
   }
- 
+
   // ==========================================
   // STEP2へ進む
   // ==========================================
@@ -498,14 +498,14 @@
     const status = document.getElementById('userStatus').value;
     const age    = document.getElementById('userAge').value;
     const gender = document.getElementById('gender').value;
- 
+
     if (!status) { alert("ご利用回数をお選びください。"); return; }
     if (!age)    { alert("年齢をご入力ください。"); return; }
     if (!gender) { alert("性別をお選びください。"); return; }
     if (selectedCourses.length === 0) { alert("コースをお選びください。"); return; }
- 
+
     const stats = updateTotal();
- 
+
     let summary = `【セルフィール新宿 予約内容】\n`;
     summary    += `ご利用：${status}\n`;
     summary    += `年齢：${age}歳\n`;
@@ -520,13 +520,13 @@
       summary += ` / ¥${o.data.price.toLocaleString()}\n`;
     });
     summary += `\n合計：${formatTimeDisplay(stats.t)} / ¥${stats.p.toLocaleString()}`;
- 
+
     document.getElementById('summaryText').innerText = summary;
     document.getElementById('step1').style.display = "none";
     document.getElementById('step2').style.display = "block";
     window.scrollTo(0, 0);
   }
- 
+
   // ==========================================
   // STEP1へ戻る
   // ==========================================
@@ -535,7 +535,7 @@
     document.getElementById('step1').style.display = "block";
     window.scrollTo(0, 0);
   }
- 
+
   // ==========================================
   // クリップボードコピー
   // ==========================================
@@ -549,7 +549,7 @@
       fallbackCopy(text);
     }
   }
- 
+
   function fallbackCopy(text) {
     const ta = document.createElement('textarea');
     ta.value = text;
@@ -569,4 +569,3 @@
 </script>
 </body>
 </html>
- 
