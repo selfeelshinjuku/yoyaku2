@@ -273,10 +273,10 @@
 
       <!-- 2回目以上 -->
       <div id="secRepeat" style="display:none;">
-        <span class="method-bar">📋 予約内容をコピーして申し込む</span>
+        <span class="method-bar">📋 予約フォームから申し込む</span>
         <div class="flow-note">
           ① 下のボタンで予約内容をコピー<br>
-          ② 予約フォームまたはLINEに貼り付け<br>
+          ② 予約フォームに貼り付け<br>
           ③ <b>予約希望日時</b>を追記して送信
         </div>
         <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
@@ -599,7 +599,7 @@ function goStep2() {
     sum += ' / ¥'+realPrice(o,isFirst).toLocaleString()+'\n';
   });
   sum += '\n合計：'+fmt(tp.t)+' / ¥'+tp.p.toLocaleString();
-  sum += '\n\n【予約希望日時】\n';
+  sum += '\n\n●内容をご確認ください\n';
 
   document.getElementById('summaryText').innerText = sum;
 
