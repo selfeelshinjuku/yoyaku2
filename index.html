@@ -70,8 +70,6 @@
       border: 1px solid #ddd; border-radius: 10px;
       margin-bottom: 12px; font-size: 16px;
     }
-
-    /* ===== カテゴリラベル ===== */
     .category-label {
       font-size: 0.76em; font-weight: bold;
       color: var(--dark-gold); letter-spacing: 1px;
@@ -79,8 +77,6 @@
       background: var(--bg-creme); border-radius: 6px;
       display: inline-block;
     }
-
-    /* ===== コースカード ===== */
     .item-card {
       display: flex; align-items: flex-start;
       padding: 12px 14px;
@@ -88,11 +84,10 @@
       border-radius: 11px; cursor: pointer;
       transition: background 0.12s, border-color 0.12s;
       border-left: 5px solid transparent;
+      user-select: none;
     }
-    .item-card:hover  { background: #fdfaf5; border-color: #e5d9ca; }
-    .item-card.on     { border-left-color: var(--gold); background: var(--bg-creme); border-color: #ddd0be; }
-
-    /* ===== オプションカード ===== */
+    .item-card:hover { background: #fdfaf5; border-color: #e5d9ca; }
+    .item-card.on    { border-left-color: var(--gold); background: var(--bg-creme); border-color: #ddd0be; }
     .opt-card {
       padding: 9px 13px;
       background: #f7f4f0; border: 1px solid #ede8e0;
@@ -101,14 +96,13 @@
       cursor: pointer;
       transition: background 0.12s, border-color 0.12s;
       display: flex; align-items: flex-start;
+      user-select: none;
     }
     .opt-card:hover { background: #f0ebe3; border-color: #d8cfc4; }
     .opt-card.on    { border-left-color: var(--dark-gold); background: #ede7dc; border-color: #cfc4b2; }
     .opt-card b     { font-size: 0.93em; }
-
-    .card-body { flex: 1; min-width: 0; }
+    .card-body { flex: 1; min-width: 0; pointer-events: none; }
     .card-name-row { display:flex; align-items:center; flex-wrap:wrap; gap:4px; }
-
     .time-price-row {
       display: flex; align-items: baseline;
       margin-top: 3px; font-size: 0.84em; max-width: 300px;
@@ -119,29 +113,21 @@
     .p-first   { color: #d94040; }
     .p-orig    { color: #bbb; text-decoration: line-through; font-size: 0.85em; margin-right: 3px; font-weight: normal; }
     .desc-tag  { font-size: 0.81em; color: #7aab8a; display: block; margin-top: 3px; }
-
-    /* ===== バッジ ===== */
     .badge { font-size:0.67em; font-weight:bold; padding:2px 7px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
     .badge-popular { background:#e8453c; color:white; }
     .badge-first   { background:#4a90d9; color:white; }
     .badge-value   { background:#f5a623; color:white; }
-
-    /* ===== オプション区切り ===== */
     .opt-label {
       font-size:0.79em; font-weight:bold; color:var(--dark-gold);
       margin:16px 0 7px; padding:4px 12px;
       background:#f0ebe3; border-radius:6px;
       display:inline-block; border-left:3px solid var(--dark-gold);
     }
-
-    /* ===== 合計エリア ===== */
     .total-area {
       background: var(--bg-creme); padding: 22px;
       border-radius: 15px; border: 1px solid #eaddca;
       text-align: center; margin-top: 20px;
     }
-
-    /* ===== ボタン ===== */
     .btn-gold {
       display: block; width: 100%; padding: 17px;
       background: linear-gradient(135deg, #d4af37, #b8a07e);
@@ -177,8 +163,6 @@
       border: 1px solid var(--gold); border-radius: 40px;
       font-size: 0.93em; cursor: pointer; margin-top: 8px;
     }
-
-    /* ===== STEP2 ===== */
     .summary-box {
       background: #faf9f5; padding: 16px; border-radius: 10px;
       border: 1px dashed #dcd8c0; margin-bottom: 12px;
@@ -191,7 +175,8 @@
       margin: 16px 0 10px;
     }
     .section-note { font-size:0.82em; color:#999; margin-bottom:10px; }
-
+    /* C欄：内側を広めに */
+    .sec-c-inner { padding: 8px 4px; }
     .sheet-frame {
       width:100%; border:1px solid #eee; border-radius:12px;
       margin-top:10px; height:480px;
@@ -250,7 +235,6 @@
   <!-- ======== STEP 2 ======== -->
   <div id="step2" style="display:none;">
 
-    <!-- A: 予約内容確認 -->
     <div class="section">
       <div class="step-title"><span class="step-badge">A</span>予約内容を確認する</div>
       <div class="flow-note">下の空き状況（B）で希望日時を確認してから、予約方法（C）に進んでください。</div>
@@ -258,7 +242,6 @@
       <button class="btn-back" onclick="backStep1()">⬅ メニューを選び直す</button>
     </div>
 
-    <!-- B: 空き状況 -->
     <div class="section">
       <div class="step-title"><span class="step-badge">B</span>空き状況を確認する</div>
       <div class="section-note">予約内容の合計時間が、希望日で空いているか確認してください。</div>
@@ -267,77 +250,79 @@
       </iframe>
     </div>
 
-    <!-- C: 予約方法 -->
-    <div class="section">
+    <div class="section" style="padding: 24px 28px;">
       <div class="step-title"><span class="step-badge">C</span>予約を申し込む</div>
+      <div class="sec-c-inner">
 
-      <!-- 2回目以上 -->
-      <div id="secRepeat" style="display:none;">
-        <span class="method-bar">📋 予約フォームから申し込む</span>
-        <div class="flow-note">
-          ① 下のボタンで予約内容をコピー<br>
-          ② 予約フォームに貼り付け<br>
-          ③ <b>予約希望日時</b>等を追記して送信
-        </div>
-        <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
+        <!-- 2回目以上 -->
+        <div id="secRepeat" style="display:none;">
+          <span class="method-bar">📋 予約フォームから申し込む</span>
+          <div class="flow-note">
+            ① 下のボタンで予約内容をコピー<br>
+            ② 予約フォームに貼り付け<br>
+            ③ <b>予約希望日時</b>等を追記して送信
+          </div>
+          <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
 
-        <span class="method-bar">💬 LINEで予約を申し込む</span>
-        <div class="flow-note">
-          ① 上のボタンで予約内容をコピー<br>
-          ② 下のLINEボタンをタップ<br>
-          ③ セルフィール新宿を送信先に選択<br>
-          ④ メッセージ欄に予約内容を貼り付け、<b>予約希望日時</b>を入力して送信
-        </div>
-        <a id="lineBtn" class="btn-line" href="#" target="_blank">
-          <span class="line-icon">💬</span>LINEでセルフィール新宿に送る
-        </a>
+          <span class="method-bar">💬 LINEで予約を申し込む</span>
+          <div class="flow-note">
+            ① 上のボタンで予約内容をコピー<br>
+            ② 下のLINEボタンをタップ<br>
+            ③ セルフィール新宿を送信先に選択<br>
+            ④ メッセージ欄に予約内容を貼り付け、<b>予約希望日時</b>を入力して送信
+          </div>
+          <a id="lineBtn" class="btn-line" href="#" target="_blank">
+            <span class="line-icon">💬</span>LINEでセルフィール新宿に送る
+          </a>
 
-        <span class="method-bar">📝 予約フォームから申し込む</span>
-        <div class="flow-note">
-          ① 上のボタンで予約内容をコピー<br>
-          ② 下のフォームに貼り付け<br>
-          ③ <b>予約希望日時</b>等を追記して送信
+          <span class="method-bar">📝 予約フォームに直接入力して申し込む</span>
+          <div class="flow-note">
+            ① 上のボタンで予約内容をコピー<br>
+            ② 下のフォームに貼り付け<br>
+            ③ <b>予約希望日時</b>等を追記して送信
+          </div>
+          <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
         </div>
-        <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
+
+        <!-- はじめて -->
+        <div id="secFirst" style="display:none;">
+          <span class="method-bar">📋 予約フォームから申し込む</span>
+          <div class="flow-note">
+            ① 下のボタンで予約内容をコピー<br>
+            ② 予約申込フォームに貼り付け<br>
+            ③ <b>予約希望日時</b>・お名前などを入力して送信
+          </div>
+          <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
+          <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
+        </div>
+
       </div>
-
-      <!-- はじめて -->
-      <div id="secFirst" style="display:none;">
-        <span class="method-bar">📋 予約フォームから申し込む</span>
-        <div class="flow-note">
-          ① 下のボタンで予約内容をコピー<br>
-          ② 予約申込フォームに貼り付け<br>
-          ③ <b>予約希望日時</b>・お名前などを入力して送信
-        </div>
-        <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
-        <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
-      </div>
-
     </div>
   </div>
 </div>
 
 <script>
-// ==============================================
-//  データ・状態
-// ==============================================
-var masterData = { courses: [], options: [] };
-
-// 選択状態は「コースID文字列のSet」で管理
-// → DOM再生成に依存しない・解除も確実
-var selCourseIds = new Set(); // e.g. "MC01"
-var selOptionIds = new Set(); // e.g. "OP01"
+// =====================================================
+//  状態管理
+//  ★ キーは「インデックス番号」で統一
+//    コースID(c.id)はスプレッドシート由来で
+//    同名コースの時間違いでIDが重複する恐れがあるため
+//    配列インデックスを使って確実に一意管理する
+// =====================================================
+var masterData   = { courses: [], options: [] };
+var selCourseIdx = new Set(); // masterData.courses の index番号
+var selOptionIdx = new Set(); // masterData.options の index番号
 
 var GAS_URL  = "https://script.google.com/macros/s/AKfycbx7yHB6hNPwjoxVxIhnTAFDxZe43e_dFAGHSpUGXrIJauBKsQl0f7mh60YDjEy-gx63/exec";
 var LINE_URL = "https://lin.ee/tvzVvYV";
 
-// ==============================================
+// =====================================================
 //  起動
-// ==============================================
+// =====================================================
 window.onload = function() {
   fetch(GAS_URL)
-    .then(function(r){ return r.json(); })
-    .then(function(data){
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
       if (data.error) {
         document.getElementById('courseList').innerHTML =
           '<div class="error-msg">エラー: ' + data.error + '</div>';
@@ -346,35 +331,36 @@ window.onload = function() {
       masterData = data;
       renderAll();
     })
-    .catch(function(e){
+    .catch(function() {
       document.getElementById('courseList').innerHTML =
         '<div class="error-msg">データ取得に失敗しました。再読み込みしてください。</div>';
     });
 };
 
-// ==============================================
-//  イベントハンドラ
-// ==============================================
+// =====================================================
+//  イベント
+// =====================================================
 function onStatusChange() { renderAll(); }
 
 function onGenderChange() {
-  selCourseIds = new Set();
-  selOptionIds = new Set();
+  selCourseIdx = new Set();
+  selOptionIdx = new Set();
   renderAll();
 }
 
-// ==============================================
+// =====================================================
 //  ユーティリティ
-// ==============================================
-function norm(s) { return String(s || '').replace(/\s+/g,'').trim(); }
+// =====================================================
+function norm(s) { return String(s||'').replace(/\s+/g,'').trim(); }
 
 function fmt(min) {
-  var m = parseInt(min)||0; if(!m) return '0分';
-  var h=Math.floor(m/60), r=m%60;
+  var m = parseInt(min)||0;
+  if (!m) return '0分';
+  var h = Math.floor(m/60), r = m%60;
   return h&&r ? h+'時間'+r+'分' : h ? h+'時間' : r+'分';
 }
 
-function badge(v) {
+function mkBadge(v) {
   var n = norm(v);
   if (n==='人気')    return '<span class="badge badge-popular">🔥 人気No.1</span>';
   if (n==='リピ') return '<span class="badge badge-first">👋 リピNo.1</span>';
@@ -382,7 +368,7 @@ function badge(v) {
   return '';
 }
 
-function priceHtml(item, isFirst) {
+function mkPriceHtml(item, isFirst) {
   if (isFirst && item.firstPrice && item.firstPrice < item.price) {
     return '<span class="p-orig">¥'+item.price.toLocaleString()+'</span>'
          + '<span class="p-first">✨ ¥'+item.firstPrice.toLocaleString()+'</span>';
@@ -390,47 +376,55 @@ function priceHtml(item, isFirst) {
   return '<span class="p-normal">¥'+item.price.toLocaleString()+'</span>';
 }
 
-function cardBody(item, isFirst) {
+// ★ card-body に pointer-events:none → クリックは必ず外側divに届く
+function mkCardBody(item, isFirst) {
   return '<div class="card-body">'
-    + '<div class="card-name-row"><b>'+item.name+'</b>'+badge(item.badge)+'</div>'
+    + '<div class="card-name-row"><b>'+item.name+'</b>'+mkBadge(item.badge)+'</div>'
     + '<div class="time-price-row">'
     +   '<span class="time-col">'+fmt(item.time)+'</span>'
-    +   '<span class="price-col">'+priceHtml(item,isFirst)+'</span>'
+    +   '<span class="price-col">'+mkPriceHtml(item,isFirst)+'</span>'
     + '</div>'
     + (item.desc ? '<span class="desc-tag">＊'+item.desc+'</span>' : '')
     + '</div>';
 }
 
-// 実際の料金（初回割引考慮）
 function realPrice(item, isFirst) {
   return (isFirst && item.firstPrice && item.firstPrice < item.price)
     ? item.firstPrice : item.price;
 }
 
-// ==============================================
-//  選択中コースのデータ取得
-// ==============================================
+// =====================================================
+//  選択中データ取得
+// =====================================================
 function getSelCourses() {
-  return masterData.courses.filter(function(c){ return selCourseIds.has(c.id); });
+  var res = [];
+  selCourseIdx.forEach(function(i) {
+    if (masterData.courses[i]) res.push(masterData.courses[i]);
+  });
+  return res;
 }
 function getSelOptions() {
-  return masterData.options.filter(function(o){ return selOptionIds.has(o.id); });
+  var res = [];
+  selOptionIdx.forEach(function(i) {
+    if (masterData.options[i]) res.push(masterData.options[i]);
+  });
+  return res;
 }
 
-// ==============================================
-//  排他セット構築
-// ==============================================
+// =====================================================
+//  排他セット（選択中コースのexclusive一覧）
+// =====================================================
 function buildBanned() {
   var banned = new Set();
-  getSelCourses().forEach(function(c){
-    (c.exclusive||[]).forEach(function(ex){ banned.add(norm(ex)); });
+  getSelCourses().forEach(function(c) {
+    (c.exclusive||[]).forEach(function(ex) { banned.add(norm(ex)); });
   });
   return banned;
 }
 
-// ==============================================
-//  全体再描画（メイン）
-// ==============================================
+// =====================================================
+//  全体再描画
+// =====================================================
 function renderAll() {
   var gender  = document.getElementById('gender').value;
   var age     = parseInt(document.getElementById('userAge').value)||0;
@@ -450,23 +444,27 @@ function renderAll() {
     return;
   }
 
-  var banned        = buildBanned();
-  var selCatSet     = new Set(getSelCourses().map(function(c){ return norm(c.category); }));
-  var selIdSet      = new Set(Array.from(selCourseIds));
+  var banned    = buildBanned();
+  var selCats   = new Set(getSelCourses().map(function(c){ return norm(c.category); }));
+  var selCIds   = new Set(getSelCourses().map(function(c){ return norm(c.id); }));
 
   // ---- コース描画 ----
   clist.innerHTML = '';
   var lastCat = null;
 
-  masterData.courses.forEach(function(c) {
+  masterData.courses.forEach(function(c, idx) {
     var cg = norm(c.gender);
     if (cg!=='共通' && cg!=='全員' && cg!==norm(gender)) return;
 
-    var isAgeBan  = c.ageLimit && age>0 && age>c.ageLimit;
-    var isSel     = selCourseIds.has(c.id);
-    var isExclude = banned.has(norm(c.name)) || banned.has(norm(c.id)) || banned.has(norm(c.category));
-    var isBanned  = isAgeBan || (isExclude && !isSel);
-    if (isBanned) return; // 非表示
+    var isSel      = selCourseIdx.has(idx);
+    var isAgeBan   = c.ageLimit && age>0 && age>c.ageLimit;
+    var isExcluded = !isSel && (
+      banned.has(norm(c.name)) ||
+      banned.has(norm(c.id))   ||
+      banned.has(norm(c.category))
+    );
+    // 排他・年齢制限は非表示
+    if (isAgeBan || isExcluded) return;
 
     if (c.category !== lastCat) {
       var lbl = document.createElement('div');
@@ -478,16 +476,15 @@ function renderAll() {
 
     var div = document.createElement('div');
     div.className = 'item-card' + (isSel ? ' on' : '');
-    div.innerHTML = cardBody(c, isFirst);
-    // data-id属性でIDを保持 → クロージャ問題を回避
-    div.setAttribute('data-id', c.id);
-    div.setAttribute('data-type', 'course');
-    div.onclick = handleCardClick;
+    div.innerHTML = mkCardBody(c, isFirst);
+    div.setAttribute('data-idx', String(idx));
+    div.setAttribute('data-kind', 'course');
+    div.addEventListener('click', onCardClick);
     clist.appendChild(div);
   });
 
   // ---- オプション描画 ----
-  if (selCourseIds.size === 0) {
+  if (selCourseIdx.size === 0) {
     oWrap.style.display = 'none';
     oMsg.style.display  = 'block';
     oMsg.innerHTML = '<div class="loading-msg">コースを選択するとオプションが表示されます</div>';
@@ -498,29 +495,34 @@ function renderAll() {
   olist.innerHTML = '';
   var hasOpt = false;
 
-  masterData.options.forEach(function(o) {
+  masterData.options.forEach(function(o, idx) {
     var og = norm(o.gender);
     if (og!=='共通' && og!=='全員' && og!==norm(gender)) return;
 
     // 紐付け条件
-    var cond = o.condition || ['全て'];
+    var cond  = o.condition || ['全て'];
     var isAll = !cond.length || cond.indexOf('全て')>=0 || cond.indexOf('全員')>=0;
     if (!isAll) {
-      var met = cond.some(function(c){ return selIdSet.has(norm(c)) || selCatSet.has(norm(c)); });
+      var met = cond.some(function(cd) {
+        return selCIds.has(norm(cd)) || selCats.has(norm(cd));
+      });
       if (!met) return;
     }
 
-    var isSel    = selOptionIds.has(o.id);
-    var isExclude= banned.has(norm(o.name)) || banned.has('op.'+norm(o.name)) || banned.has(norm(o.id));
-    var isBanned = isExclude && !isSel;
-    if (isBanned) return;
+    var isSel      = selOptionIdx.has(idx);
+    var isExcluded = !isSel && (
+      banned.has(norm(o.name)) ||
+      banned.has('op.'+norm(o.name)) ||
+      banned.has(norm(o.id))
+    );
+    if (isExcluded) return;
 
     var div = document.createElement('div');
     div.className = 'opt-card' + (isSel ? ' on' : '');
-    div.innerHTML = cardBody(o, isFirst);
-    div.setAttribute('data-id', o.id);
-    div.setAttribute('data-type', 'option');
-    div.onclick = handleCardClick;
+    div.innerHTML = mkCardBody(o, isFirst);
+    div.setAttribute('data-idx', String(idx));
+    div.setAttribute('data-kind', 'option');
+    div.addEventListener('click', onCardClick);
     olist.appendChild(div);
     hasOpt = true;
   });
@@ -532,36 +534,36 @@ function renderAll() {
   updTotal();
 }
 
-// ==============================================
-//  カードクリック（data-id / data-type で判定）
-// ==============================================
-function handleCardClick(e) {
-  // 子要素（b, span等）がクリックされても必ず親カードのdata-idを取得
-  var div  = e.target.closest('[data-id]');
-  if (!div) return;
-  var id   = div.getAttribute('data-id');
-  var type = div.getAttribute('data-type');
+// =====================================================
+//  カードクリック
+//  ★ card-body に pointer-events:none を設定しているため
+//    クリックは必ずカードdiv自身に届く → e.currentTarget で安全に取得
+// =====================================================
+function onCardClick(e) {
+  var div  = e.currentTarget;
+  var idx  = parseInt(div.getAttribute('data-idx'), 10);
+  var kind = div.getAttribute('data-kind');
 
-  if (type === 'course') {
-    if (selCourseIds.has(id)) {
-      selCourseIds.delete(id);
-      selOptionIds = new Set(); // コース解除 → オプションリセット
+  if (kind === 'course') {
+    if (selCourseIdx.has(idx)) {
+      selCourseIdx.delete(idx);
+      selOptionIdx = new Set(); // コース解除時はオプションもリセット
     } else {
-      selCourseIds.add(id);
+      selCourseIdx.add(idx);
     }
   } else {
-    if (selOptionIds.has(id)) {
-      selOptionIds.delete(id);
+    if (selOptionIdx.has(idx)) {
+      selOptionIdx.delete(idx);
     } else {
-      selOptionIds.add(id);
+      selOptionIdx.add(idx);
     }
   }
   renderAll();
 }
 
-// ==============================================
+// =====================================================
 //  合計更新
-// ==============================================
+// =====================================================
 function updTotal() {
   var isFirst = document.getElementById('userStatus').value === 'はじめて';
   var t=0, p=0;
@@ -572,9 +574,9 @@ function updTotal() {
   return {t:t, p:p};
 }
 
-// ==============================================
+// =====================================================
 //  STEP2へ進む
-// ==============================================
+// =====================================================
 function goStep2() {
   var status   = document.getElementById('userStatus').value;
   var age      = document.getElementById('userAge').value;
@@ -582,10 +584,10 @@ function goStep2() {
   var isFirst  = status === 'はじめて';
   var isRepeat = (status === '2回目' || status === '3回目以上');
 
-  if (!status)             { alert('ご利用回数をお選びください。'); return; }
-  if (!age)                { alert('年齢をご入力ください。'); return; }
-  if (!gender)             { alert('性別をお選びください。'); return; }
-  if (selCourseIds.size===0){ alert('コースをお選びください。'); return; }
+  if (!status)               { alert('ご利用回数をお選びください。'); return; }
+  if (!age)                  { alert('年齢をご入力ください。'); return; }
+  if (!gender)               { alert('性別をお選びください。'); return; }
+  if (selCourseIdx.size===0) { alert('コースをお選びください。'); return; }
 
   var tp = updTotal();
 
@@ -594,10 +596,10 @@ function goStep2() {
           + '年齢：'+age+'歳\n'
           + '性別：'+gender+'\n\n'
           + '■メニュー\n';
-  getSelCourses().forEach(function(c){
+  getSelCourses().forEach(function(c) {
     sum += '・'+c.name+' ('+fmt(c.time)+') / ¥'+realPrice(c,isFirst).toLocaleString()+'\n';
   });
-  getSelOptions().forEach(function(o){
+  getSelOptions().forEach(function(o) {
     sum += '・'+o.name;
     if (o.time>0) sum += ' ('+fmt(o.time)+')';
     sum += ' / ¥'+realPrice(o,isFirst).toLocaleString()+'\n';
@@ -607,7 +609,6 @@ function goStep2() {
 
   document.getElementById('summaryText').innerText = sum;
 
-  // C：利用回数で表示切替
   document.getElementById('secRepeat').style.display = isRepeat ? 'block' : 'none';
   document.getElementById('secFirst').style.display  = isFirst  ? 'block' : 'none';
 
@@ -621,32 +622,30 @@ function goStep2() {
   window.scrollTo(0,0);
 }
 
-// ==============================================
-//  STEP1へ戻る（選択状態は保持）
-// ==============================================
+// =====================================================
+//  STEP1へ戻る（選択状態保持）
+// =====================================================
 function backStep1() {
   document.getElementById('step2').style.display = 'none';
   document.getElementById('step1').style.display = 'block';
   window.scrollTo(0,0);
 }
 
-// ==============================================
-//  コピー（利用回数で文言変更）
-// ==============================================
+// =====================================================
+//  コピー
+// =====================================================
 function doCopy() {
-  var text     = document.getElementById('summaryText').innerText;
-  var isFirst  = document.getElementById('userStatus').value === 'はじめて';
+  var text    = document.getElementById('summaryText').innerText;
+  var isFirst = document.getElementById('userStatus').value === 'はじめて';
   var msg = isFirst
     ? 'コピーしました！\n下の予約フォームに貼り付けて、予約希望日時・お名前などを入力して送信してください。'
     : 'コピーしました！\n予約フォームまたはLINEに貼り付けて、予約希望日時を入力して送信してください。';
-
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(function(){ alert(msg); }).catch(function(){ fbCopy(text,msg); });
   } else {
     fbCopy(text, msg);
   }
 }
-
 function fbCopy(text, msg) {
   var ta = document.createElement('textarea');
   ta.value = text;
