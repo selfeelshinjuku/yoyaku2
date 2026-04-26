@@ -275,12 +275,6 @@
             <span class="line-icon">💬</span>LINEでセルフィール新宿に送る
           </a>
 
-          <span class="method-bar">📝 予約フォームに直接入力して申し込む</span>
-          <div class="flow-note">
-            ① 上のボタンで予約内容をコピー<br>
-            ② 下のフォームに貼り付け<br>
-            ③ <b>予約希望日時</b>等を追記して送信
-          </div>
           <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
         </div>
 
@@ -595,15 +589,19 @@ function goStep2() {
           + 'ご利用：'+status+'\n'
           + '年齢：'+age+'歳\n'
           + '性別：'+gender+'\n\n'
-          + '■メニュー\n';
+          + '■コース\n';
   getSelCourses().forEach(function(c) {
     sum += '・'+c.name+' ('+fmt(c.time)+') / ¥'+realPrice(c,isFirst).toLocaleString()+'\n';
   });
-  getSelOptions().forEach(function(o) {
-    sum += '・'+o.name;
-    if (o.time>0) sum += ' ('+fmt(o.time)+')';
-    sum += ' / ¥'+realPrice(o,isFirst).toLocaleString()+'\n';
-  });
+  var selOpts = getSelOptions();
+  if (selOpts.length > 0) {
+    sum += '\n■オプション\n';
+    selOpts.forEach(function(o) {
+      sum += '・'+o.name;
+      if (o.time>0) sum += ' ('+fmt(o.time)+')';
+      sum += ' / ¥'+realPrice(o,isFirst).toLocaleString()+'\n';
+    });
+  }
   sum += '\n合計：'+fmt(tp.t)+' / ¥'+tp.p.toLocaleString();
   sum += '\n\n●内容をご確認ください\n';
 
