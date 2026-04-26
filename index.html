@@ -473,7 +473,7 @@ function renderAll() {
     div.innerHTML = mkCardBody(c, isFirst);
     div.setAttribute('data-idx', String(idx));
     div.setAttribute('data-kind', 'course');
-    div.addEventListener('click', onCardClick);
+    div.onclick = onCardClick;
     clist.appendChild(div);
   });
 
@@ -516,7 +516,7 @@ function renderAll() {
     div.innerHTML = mkCardBody(o, isFirst);
     div.setAttribute('data-idx', String(idx));
     div.setAttribute('data-kind', 'option');
-    div.addEventListener('click', onCardClick);
+    div.onclick = onCardClick;
     olist.appendChild(div);
     hasOpt = true;
   });
@@ -534,7 +534,10 @@ function renderAll() {
 //    クリックは必ずカードdiv自身に届く → e.currentTarget で安全に取得
 // =====================================================
 function onCardClick(e) {
-  var div  = e.currentTarget;
+  // pointer-events:none により e.target は必ずカード自身
+  // closest でさらに確実に取得
+  var div  = e.currentTarget || e.target.closest('[data-idx]');
+  if (!div || !div.getAttribute('data-idx')) return;
   var idx  = parseInt(div.getAttribute('data-idx'), 10);
   var kind = div.getAttribute('data-kind');
 
