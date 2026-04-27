@@ -242,7 +242,7 @@
 
     <div class="section">
       <div class="step-title"><span class="step-badge">2</span>コースとオプションをお選びください</div>
-      <label>※複数選択可（組み合わせ不可コースは表示から消えます）</label>
+      <label>※複数選択可（組み合わせできないコースは消えます）</label>
       <div id="courseList"><div class="loading-msg">性別を選択してください</div></div>
       <div id="optionWrap" style="display:none;">
         <div class="opt-label">＋ オプションを追加してカスタマイズできます（任意）</div>
@@ -266,7 +266,7 @@
 
     <div class="section">
       <div class="step-title"><span class="step-badge">A</span>予約内容を確認する</div>
-      <div class="flow-note">下の空き状況（B）で希望日時を確認して、予約方法（C）に進んでください。</div>
+      <div class="flow-note">下の空き状況（B）で希望日時を確認してから、予約方法（C）に進んでください。</div>
       <div id="summaryText" class="summary-box"></div>
       <button class="btn-back" onclick="backStep1()">⬅ メニューを選び直す</button>
     </div>
@@ -291,7 +291,6 @@
             ② 予約フォームに貼り付け<br>
             ③ <b>予約希望日時</b>等を追記して送信<br>
             <br>
-            <br>
           </div>
           <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
 
@@ -299,14 +298,12 @@
           <div class="flow-note">
             ① 上のボタンで予約内容をコピー<br>
             ② 下のLINEボタンをタップ<br>
-            ③ LINEでセルフィール新宿を送信先に選択して転送<br>
-            ④ メッセージ入力またはトーク画面から<br>
-            <b>予約希望日時</b>を入力して送信<br>
-            <br>
+            ③ セルフィール新宿を送信先に選択して転送<br>
+            ④ またはメッセージ欄に予約内容を貼り付け、<b>予約希望日時</b>を入力して送信<br>
             <br>
           </div>
           <a id="lineBtn" class="btn-line" href="#" target="_blank">
-            <span class="line-icon">💬</span>LINEで予約する
+            <span class="line-icon">💬</span>LINEで予約内容を転送する
           </a>
 
           <iframe class="form-frame" src="https://ws.formzu.net/sfgen/S967546633/"></iframe>
@@ -319,7 +316,6 @@
             ① 下のボタンで予約内容をコピー<br>
             ② 予約申込フォームに貼り付け<br>
             ③ <b>予約希望日時</b>・お名前などを入力して送信<br>
-            <br>
             <br>
           </div>
           <button class="btn-dark" onclick="doCopy()">📋 予約内容をコピーする</button>
@@ -622,7 +618,7 @@ function goStep2() {
 
   var tp = updTotal();
 
-  var sum = '【セルフィール新宿 予約内容】\n'<br>
+  var sum = '【セルフィール新宿 予約内容】\n'
           + 'ご利用：'+status+'\n'
           + '年齢：'+age+'歳\n'
           + '性別：'+gender+'\n\n'
@@ -640,7 +636,7 @@ function goStep2() {
     });
   }
   sum += '\n合計：'+fmt(tp.t)+' / ¥'+tp.p.toLocaleString();
-  sum += '\n\n●ご予約内容と空き状況を確認して予約申し込みへ\n';
+  sum += '\n\n●内容をご確認ください\n';
 
   document.getElementById('summaryText').innerText = sum;
 
