@@ -670,7 +670,7 @@ function doCopy() {
   var isFirst = document.getElementById('userStatus').value === 'はじめて';
   var msg = isFirst
     ? 'コピーしました！\n下の予約フォームに貼り付けて、予約希望日時・お名前などを入力して送信してください。'
-    : 'コピーしました！\n予約フォームまたはLINEに貼り付けて、予約希望日時を入力して送信してください。';
+    : 'コピーしました！\n予約フォームまたはLINEに貼り付け、予約希望日時・お名前などを入力して送信してください。';
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(function(){ alert(msg); }).catch(function(){ fbCopy(text,msg); });
   } else {
