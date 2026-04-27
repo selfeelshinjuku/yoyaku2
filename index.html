@@ -77,30 +77,43 @@
       background: var(--bg-creme); border-radius: 6px;
       display: inline-block;
     }
+
+    /* ===== コースカード ===== */
     .item-card {
       display: flex; align-items: flex-start;
       padding: 12px 14px;
       border: 1px solid #ececec; margin-bottom: 5px;
       border-radius: 11px; cursor: pointer;
-      transition: background 0.12s, border-color 0.12s;
       border-left: 5px solid transparent;
       user-select: none;
+      /* transitionは視覚的ちらつきを防ぐため除去 */
     }
     .item-card:hover { background: #fdfaf5; border-color: #e5d9ca; }
-    .item-card.on    { border-left-color: var(--gold); background: var(--bg-creme); border-color: #ddd0be; }
+    .item-card.on {
+      border-left-color: var(--gold) !important;
+      background: #f5ede0 !important;
+      border-color: #ddd0be !important;
+    }
+
+    /* ===== オプションカード ===== */
     .opt-card {
       padding: 9px 13px;
       background: #f7f4f0; border: 1px solid #ede8e0;
       border-left: 5px solid transparent;
       border-radius: 9px; margin-bottom: 5px;
       cursor: pointer;
-      transition: background 0.12s, border-color 0.12s;
       display: flex; align-items: flex-start;
       user-select: none;
     }
     .opt-card:hover { background: #f0ebe3; border-color: #d8cfc4; }
-    .opt-card.on    { border-left-color: var(--dark-gold); background: #ede7dc; border-color: #cfc4b2; }
-    .opt-card b     { font-size: 0.93em; }
+    .opt-card.on {
+      border-left-color: var(--dark-gold) !important;
+      background: #e8ddd0 !important;
+      border-color: #c8b89a !important;
+    }
+    .opt-card b { font-size: 0.93em; }
+
+    /* card-body の子要素はクリックを受け取らない（親divに委譲） */
     .card-body { flex: 1; min-width: 0; pointer-events: none; }
     .card-name-row { display:flex; align-items:center; flex-wrap:wrap; gap:4px; }
     .time-price-row {
@@ -113,21 +126,36 @@
     .p-first   { color: #d94040; }
     .p-orig    { color: #bbb; text-decoration: line-through; font-size: 0.85em; margin-right: 3px; font-weight: normal; }
     .desc-tag  { font-size: 0.81em; color: #7aab8a; display: block; margin-top: 3px; }
-    .badge { font-size:0.67em; font-weight:bold; padding:2px 7px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
-    .badge-popular { background:#e8453c; color:white; }
-    .badge-first   { background:#4a90d9; color:white; }
-    .badge-value   { background:#f5a623; color:white; }
+
+    /* ===== バッジ共通 ===== */
+    .badge {
+      display: inline-block;
+      font-size: 0.67em; font-weight: bold;
+      padding: 2px 7px; border-radius: 20px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .badge-popular { background: #e8453c; color: white; }
+    .badge-first   { background: #4a90d9; color: white; }
+    .badge-value   { background: #f5a623; color: white; }
+    /* 選択中バッジ */
+    .badge-selected { background: var(--dark-gold); color: white; }
+
+    /* ===== オプション区切り ===== */
     .opt-label {
       font-size:0.79em; font-weight:bold; color:var(--dark-gold);
       margin:16px 0 7px; padding:4px 12px;
       background:#f0ebe3; border-radius:6px;
       display:inline-block; border-left:3px solid var(--dark-gold);
     }
+
+    /* ===== 合計エリア ===== */
     .total-area {
       background: var(--bg-creme); padding: 22px;
       border-radius: 15px; border: 1px solid #eaddca;
       text-align: center; margin-top: 20px;
     }
+
+    /* ===== ボタン ===== */
     .btn-gold {
       display: block; width: 100%; padding: 17px;
       background: linear-gradient(135deg, #d4af37, #b8a07e);
@@ -163,6 +191,8 @@
       border: 1px solid var(--gold); border-radius: 40px;
       font-size: 0.93em; cursor: pointer; margin-top: 8px;
     }
+
+    /* ===== STEP2 ===== */
     .summary-box {
       background: #faf9f5; padding: 16px; border-radius: 10px;
       border: 1px dashed #dcd8c0; margin-bottom: 12px;
@@ -175,7 +205,6 @@
       margin: 16px 0 10px;
     }
     .section-note { font-size:0.82em; color:#999; margin-bottom:10px; }
-    /* C欄：内側を広めに */
     .sec-c-inner { padding: 8px 4px; }
     .sheet-frame {
       width:100%; border:1px solid #eee; border-radius:12px;
@@ -303,15 +332,11 @@
 
 <script>
 // =====================================================
-//  状態管理
-//  ★ キーは「インデックス番号」で統一
-//    コースID(c.id)はスプレッドシート由来で
-//    同名コースの時間違いでIDが重複する恐れがあるため
-//    配列インデックスを使って確実に一意管理する
+//  状態管理（配列インデックスのSetで一意管理）
 // =====================================================
 var masterData   = { courses: [], options: [] };
-var selCourseIdx = new Set(); // masterData.courses の index番号
-var selOptionIdx = new Set(); // masterData.options の index番号
+var selCourseIdx = new Set();
+var selOptionIdx = new Set();
 
 var GAS_URL  = "https://script.google.com/macros/s/AKfycbx7yHB6hNPwjoxVxIhnTAFDxZe43e_dFAGHSpUGXrIJauBKsQl0f7mh60YDjEy-gx63/exec";
 var LINE_URL = "https://lin.ee/tvzVvYV";
@@ -363,7 +388,7 @@ function fmt(min) {
 function mkBadge(v) {
   var n = norm(v);
   if (n==='人気')    return '<span class="badge badge-popular">🔥 人気No.1</span>';
-  if (n==='リピ') return '<span class="badge badge-first">👋 リピNo.1</span>';
+  if (n==='リピ')   return '<span class="badge badge-first">👋 リピNo.1</span>';
   if (n==='NEW')    return '<span class="badge badge-value">⭐ NEW!</span>';
   return '';
 }
@@ -376,10 +401,11 @@ function mkPriceHtml(item, isFirst) {
   return '<span class="p-normal">¥'+item.price.toLocaleString()+'</span>';
 }
 
-// ★ card-body に pointer-events:none → クリックは必ず外側divに届く
-function mkCardBody(item, isFirst) {
+// isSel を引数で受け取り、選択中バッジを出し分ける
+function mkCardBody(item, isFirst, isSel) {
+  var selBadge = isSel ? '<span class="badge badge-selected">✔ 選択中</span>' : '';
   return '<div class="card-body">'
-    + '<div class="card-name-row"><b>'+item.name+'</b>'+mkBadge(item.badge)+'</div>'
+    + '<div class="card-name-row"><b>'+item.name+'</b>'+mkBadge(item.badge)+selBadge+'</div>'
     + '<div class="time-price-row">'
     +   '<span class="time-col">'+fmt(item.time)+'</span>'
     +   '<span class="price-col">'+mkPriceHtml(item,isFirst)+'</span>'
@@ -412,7 +438,7 @@ function getSelOptions() {
 }
 
 // =====================================================
-//  排他セット（選択中コースのexclusive一覧）
+//  排他セット
 // =====================================================
 function buildBanned() {
   var banned = new Set();
@@ -444,9 +470,9 @@ function renderAll() {
     return;
   }
 
-  var banned    = buildBanned();
-  var selCats   = new Set(getSelCourses().map(function(c){ return norm(c.category); }));
-  var selCIds   = new Set(getSelCourses().map(function(c){ return norm(c.id); }));
+  var banned  = buildBanned();
+  var selCats = new Set(getSelCourses().map(function(c){ return norm(c.category); }));
+  var selCIds = new Set(getSelCourses().map(function(c){ return norm(c.id); }));
 
   // ---- コース描画 ----
   clist.innerHTML = '';
@@ -463,7 +489,6 @@ function renderAll() {
       banned.has(norm(c.id))   ||
       banned.has(norm(c.category))
     );
-    // 排他・年齢制限は非表示
     if (isAgeBan || isExcluded) return;
 
     if (c.category !== lastCat) {
@@ -475,8 +500,9 @@ function renderAll() {
     }
 
     var div = document.createElement('div');
-    div.className = 'item-card' + (isSel ? ' on' : '');
-    div.innerHTML = mkCardBody(c, isFirst);
+    // クラスを文字列で直接設定（確実に反映）
+    div.className = isSel ? 'item-card on' : 'item-card';
+    div.innerHTML = mkCardBody(c, isFirst, isSel);
     div.setAttribute('data-idx', String(idx));
     div.setAttribute('data-kind', 'course');
     div.onclick = onCardClick;
@@ -499,7 +525,6 @@ function renderAll() {
     var og = norm(o.gender);
     if (og!=='共通' && og!=='全員' && og!==norm(gender)) return;
 
-    // 紐付け条件
     var cond  = o.condition || ['全て'];
     var isAll = !cond.length || cond.indexOf('全て')>=0 || cond.indexOf('全員')>=0;
     if (!isAll) {
@@ -518,8 +543,8 @@ function renderAll() {
     if (isExcluded) return;
 
     var div = document.createElement('div');
-    div.className = 'opt-card' + (isSel ? ' on' : '');
-    div.innerHTML = mkCardBody(o, isFirst);
+    div.className = isSel ? 'opt-card on' : 'opt-card';
+    div.innerHTML = mkCardBody(o, isFirst, isSel);
     div.setAttribute('data-idx', String(idx));
     div.setAttribute('data-kind', 'option');
     div.onclick = onCardClick;
@@ -536,21 +561,22 @@ function renderAll() {
 
 // =====================================================
 //  カードクリック
-//  ★ card-body に pointer-events:none を設定しているため
-//    クリックは必ずカードdiv自身に届く → e.currentTarget で安全に取得
+//  DOMを毎回再生成しているため e.currentTarget は常に
+//  その時点のdivを指す。onclick代入なので累積なし。
 // =====================================================
 function onCardClick(e) {
-  // pointer-events:none により e.target は必ずカード自身
-  // closest でさらに確実に取得
-  var div  = e.currentTarget || e.target.closest('[data-idx]');
-  if (!div || !div.getAttribute('data-idx')) return;
+  // card-body に pointer-events:none があるので
+  // e.currentTarget = クリックされたカードdiv 自身
+  var div  = e.currentTarget;
   var idx  = parseInt(div.getAttribute('data-idx'), 10);
   var kind = div.getAttribute('data-kind');
+
+  if (isNaN(idx)) return; // 安全チェック
 
   if (kind === 'course') {
     if (selCourseIdx.has(idx)) {
       selCourseIdx.delete(idx);
-      selOptionIdx = new Set(); // コース解除時はオプションもリセット
+      selOptionIdx = new Set(); // コース解除 → オプションリセット
     } else {
       selCourseIdx.add(idx);
     }
@@ -561,6 +587,7 @@ function onCardClick(e) {
       selOptionIdx.add(idx);
     }
   }
+
   renderAll();
 }
 
@@ -639,7 +666,7 @@ function backStep1() {
 }
 
 // =====================================================
-//  コピー
+//  コピー（利用回数で文言変更）
 // =====================================================
 function doCopy() {
   var text    = document.getElementById('summaryText').innerText;
