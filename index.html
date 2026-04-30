@@ -86,9 +86,12 @@
       border-radius: 11px; cursor: pointer;
       border-left: 5px solid transparent;
       user-select: none;
-      /* transitionは視覚的ちらつきを防ぐため除去 */
+      background: white; /* 明示的にwhiteを設定 */
     }
-    .item-card:hover { background: #fdfaf5; border-color: #e5d9ca; }
+    /* hoverは未選択カードのみ（タッチ後の残留を防ぐため@media で制御） */
+    @media (hover: hover) {
+      .item-card:not(.on):hover { background: #fdfaf5; border-color: #e5d9ca; }
+    }
     .item-card.on {
       border-left-color: var(--gold) !important;
       background: #f5ede0 !important;
@@ -105,7 +108,9 @@
       display: flex; align-items: flex-start;
       user-select: none;
     }
-    .opt-card:hover { background: #f0ebe3; border-color: #d8cfc4; }
+    @media (hover: hover) {
+      .opt-card:not(.on):hover { background: #f0ebe3; border-color: #d8cfc4; }
+    }
     .opt-card.on {
       border-left-color: var(--dark-gold) !important;
       background: #e8ddd0 !important;
@@ -113,7 +118,6 @@
     }
     .opt-card b { font-size: 0.93em; }
 
-    /* card-body の子要素はクリックを受け取らない（親divに委譲） */
     .card-body { flex: 1; min-width: 0; pointer-events: none; }
     .card-name-row { display:flex; align-items:center; flex-wrap:wrap; gap:4px; }
     .time-price-row {
@@ -127,18 +131,55 @@
     .p-orig    { color: #bbb; text-decoration: line-through; font-size: 0.85em; margin-right: 3px; font-weight: normal; }
     .desc-tag  { font-size: 0.81em; color: #7aab8a; display: block; margin-top: 3px; }
 
-    /* ===== バッジ共通 ===== */
+    /* ===== バッジ ===== */
     .badge {
       display: inline-block;
       font-size: 0.67em; font-weight: bold;
       padding: 2px 7px; border-radius: 20px;
       white-space: nowrap; flex-shrink: 0;
     }
-    .badge-popular { background: #e8453c; color: white; }
-    .badge-first   { background: #4a90d9; color: white; }
-    .badge-value   { background: #f5a623; color: white; }
-    /* 選択中バッジ */
+    .badge-popular  { background: #e8453c; color: white; }
+    .badge-first    { background: #4a90d9; color: white; }
+    .badge-value    { background: #f5a623; color: white; }
     .badge-selected { background: var(--dark-gold); color: white; }
+
+    /* ===== 選択後ナビゲーションボックス ===== */
+    .sel-nav-box {
+      margin: 10px 0 6px;
+      padding: 14px 16px;
+      background: #faf7f2;
+      border: 1px dashed #d4b896;
+      border-radius: 12px;
+      font-size: 0.84em;
+      color: #6a5a4a;
+      line-height: 1.7;
+    }
+    .sel-nav-box p {
+      margin: 0 0 8px;
+      font-weight: bold;
+      color: var(--dark-gold);
+      font-size: 0.95em;
+    }
+    .sel-nav-btn {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--gold);
+      background: white;
+      color: var(--dark-gold);
+      font-size: 0.88em;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 3px 4px 3px 0;
+      white-space: nowrap;
+    }
+    .sel-nav-btn:active { background: var(--bg-creme); }
+    .sel-nav-note {
+      display: block;
+      margin-top: 8px;
+      font-size: 0.82em;
+      color: #999;
+    }
 
     /* ===== オプション区切り ===== */
     .opt-label {
@@ -244,14 +285,16 @@
       <div class="step-title"><span class="step-badge">2</span>コースとオプションをお選びください</div>
       <label>※複数選択可（組み合わせできないコースは消えます）</label>
       <div id="courseList"><div class="loading-msg">性別を選択してください</div></div>
+      <!-- 選択後ナビゲーション（JS で動的挿入） -->
+      <div id="selNavArea"></div>
       <div id="optionWrap" style="display:none;">
-        <div class="opt-label">＋ オプションを追加してカスタマイズできます（任意）</div>
+        <div class="opt-label" id="optionAnchor">＋ オプションを追加してカスタマイズできます（任意）</div>
         <div id="optionList"></div>
       </div>
       <div id="optionMsg"><div class="loading-msg">コースを選択するとオプションが表示されます</div></div>
     </div>
 
-    <div class="total-area">
+    <div class="total-area" id="totalArea">
       <div style="font-size:1.2em;font-weight:bold;">
         合計時間：<span id="dispTime">0分</span>　料金：¥<span id="dispPrice">0</span>
       </div>
@@ -329,7 +372,7 @@
 
 <script>
 // =====================================================
-//  状態管理（配列インデックスのSetで一意管理）
+//  状態管理
 // =====================================================
 var masterData   = { courses: [], options: [] };
 var selCourseIdx = new Set();
@@ -384,9 +427,9 @@ function fmt(min) {
 
 function mkBadge(v) {
   var n = norm(v);
-  if (n==='人気')    return '<span class="badge badge-popular">🔥 人気No.1</span>';
-  if (n==='リピ')   return '<span class="badge badge-first">👋 リピNo.1</span>';
-  if (n==='NEW')    return '<span class="badge badge-value">⭐ NEW!</span>';
+  if (n==='人気')  return '<span class="badge badge-popular">🔥 人気No.1</span>';
+  if (n==='リピ')  return '<span class="badge badge-first">👋 リピNo.1</span>';
+  if (n==='NEW')   return '<span class="badge badge-value">⭐ NEW!</span>';
   return '';
 }
 
@@ -398,7 +441,6 @@ function mkPriceHtml(item, isFirst) {
   return '<span class="p-normal">¥'+item.price.toLocaleString()+'</span>';
 }
 
-// isSel を引数で受け取り、選択中バッジを出し分ける
 function mkCardBody(item, isFirst, isSel) {
   var selBadge = isSel ? '<span class="badge badge-selected">✔ 選択中</span>' : '';
   return '<div class="card-body">'
@@ -446,6 +488,37 @@ function buildBanned() {
 }
 
 // =====================================================
+//  選択後ナビゲーションボックスを描画
+// =====================================================
+function renderSelNav() {
+  var area = document.getElementById('selNavArea');
+  if (selCourseIdx.size === 0) {
+    area.innerHTML = '';
+    return;
+  }
+
+  var box = document.createElement('div');
+  box.className = 'sel-nav-box';
+
+  box.innerHTML =
+    '<p>コースを選択しました。次はどうしますか？</p>'
+    + '<button class="sel-nav-btn" onclick="jumpToOption()">▼ オプションを見る</button>'
+    + '<button class="sel-nav-btn" onclick="goStep2()">→ このまま予約申込へ進む</button>'
+    + '<span class="sel-nav-note">他のコースと組み合わせる場合は、このままスクロールしてコースを追加してください。</span>';
+
+  area.innerHTML = '';
+  area.appendChild(box);
+}
+
+// オプションエリアへスムーズスクロール
+function jumpToOption() {
+  var target = document.getElementById('optionAnchor') || document.getElementById('optionMsg');
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// =====================================================
 //  全体再描画
 // =====================================================
 function renderAll() {
@@ -463,6 +536,7 @@ function renderAll() {
     oWrap.style.display = 'none';
     oMsg.style.display  = 'block';
     oMsg.innerHTML = '<div class="loading-msg">コースを選択するとオプションが表示されます</div>';
+    document.getElementById('selNavArea').innerHTML = '';
     updTotal();
     return;
   }
@@ -497,7 +571,6 @@ function renderAll() {
     }
 
     var div = document.createElement('div');
-    // クラスを文字列で直接設定（確実に反映）
     div.className = isSel ? 'item-card on' : 'item-card';
     div.innerHTML = mkCardBody(c, isFirst, isSel);
     div.setAttribute('data-idx', String(idx));
@@ -505,6 +578,9 @@ function renderAll() {
     div.onclick = onCardClick;
     clist.appendChild(div);
   });
+
+  // 選択後ナビゲーション描画
+  renderSelNav();
 
   // ---- オプション描画 ----
   if (selCourseIdx.size === 0) {
@@ -558,22 +634,17 @@ function renderAll() {
 
 // =====================================================
 //  カードクリック
-//  DOMを毎回再生成しているため e.currentTarget は常に
-//  その時点のdivを指す。onclick代入なので累積なし。
 // =====================================================
 function onCardClick(e) {
-  // card-body に pointer-events:none があるので
-  // e.currentTarget = クリックされたカードdiv 自身
   var div  = e.currentTarget;
   var idx  = parseInt(div.getAttribute('data-idx'), 10);
   var kind = div.getAttribute('data-kind');
-
-  if (isNaN(idx)) return; // 安全チェック
+  if (isNaN(idx)) return;
 
   if (kind === 'course') {
     if (selCourseIdx.has(idx)) {
       selCourseIdx.delete(idx);
-      selOptionIdx = new Set(); // コース解除 → オプションリセット
+      selOptionIdx = new Set();
     } else {
       selCourseIdx.add(idx);
     }
@@ -584,7 +655,6 @@ function onCardClick(e) {
       selOptionIdx.add(idx);
     }
   }
-
   renderAll();
 }
 
@@ -654,7 +724,7 @@ function goStep2() {
 }
 
 // =====================================================
-//  STEP1へ戻る（選択状態保持）
+//  STEP1へ戻る
 // =====================================================
 function backStep1() {
   document.getElementById('step2').style.display = 'none';
@@ -663,7 +733,7 @@ function backStep1() {
 }
 
 // =====================================================
-//  コピー（利用回数で文言変更）
+//  コピー
 // =====================================================
 function doCopy() {
   var text    = document.getElementById('summaryText').innerText;
