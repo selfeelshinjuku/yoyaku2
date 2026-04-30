@@ -577,10 +577,22 @@ function renderAll() {
     div.setAttribute('data-kind', 'course');
     div.onclick = onCardClick;
     clist.appendChild(div);
+
+    // 選択中カードの直下にナビゲーションボックスを挿入
+    if (isSel) {
+      var nav = document.createElement('div');
+      nav.className = 'sel-nav-box';
+      nav.innerHTML =
+        '<p>コースを選択しました。次はどうしますか？</p>'
+        + '<button class="sel-nav-btn" onclick="jumpToOption()">▼ オプションを見る</button>'
+        + '<button class="sel-nav-btn" onclick="goStep2()">→ このまま予約申込へ進む</button>'
+        + '<span class="sel-nav-note">他のコースと組み合わせる場合は、このままスクロールしてコースを追加してください。</span>';
+      clist.appendChild(nav);
+    }
   });
 
-  // 選択後ナビゲーション描画
-  renderSelNav();
+  // selNavArea は使わないので空に
+  document.getElementById('selNavArea').innerHTML = '';
 
   // ---- オプション描画 ----
   if (selCourseIdx.size === 0) {
